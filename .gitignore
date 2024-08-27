@@ -1,0 +1,17 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/DatosB/.vs
+/DatosB/bin
+/DatosB/obj/Debug
+/DatosB/obj/Release
+/DatosB/obj
+/LogicaB/.vs
+/LogicaB/bin
+/LogicaB/obj
+/SetupAdminBiometricos/Setup
+/Tests
+*.dat
+/Respaldo 20211203.sql
+/Entregables
