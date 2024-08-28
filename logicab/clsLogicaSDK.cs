@@ -143,10 +143,10 @@ namespace LogicaB
             }
         }
 
-        public void IniicalizaTablasDescargaTemporales()
+        public void InicializaTablasDescargaTemporales()
         {
             clsDatosSDK oDatos = new clsDatosSDK();
-            oDatos.IniicalizaTablasDescargaTemporales();
+            oDatos.InicializaTablasDescargaTemporales();
         }
         //public void GuardaSoloMarcacionesTemporalesDepuradas(DataGridView dgv, string sn, int inicio, int fin)
         //{

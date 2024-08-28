@@ -172,7 +172,7 @@ WHEN NOT MATCHED THEN
             ClsAccesoDatos.EjecutaNoQuery(sbQueryBadgeNames.ToString());
         }
 
-        public void IniicalizaTablasDescargaTemporales()
+        public void InicializaTablasDescargaTemporales()
         {
             ClsAccesoDatos.EjecutaNoQuery($@"TRUNCATE TABLE tmp_MARCACIONES;
 TRUNCATE TABLE tmp_BADGES;");
