@@ -107,7 +107,7 @@ namespace LogicaB
             return oDatos.RetornaRostros(sBusqueda);
         }
 
-        public void IniciaGrabacionMarcaciones(string sn, int numeroMarcaciones = 0)
+        public static void IniciaGrabacionMarcaciones(string sn)
         {
             try
             {
@@ -220,7 +220,7 @@ namespace LogicaB
             }
         }
 
-        public DataTable GrabacionMarcacionesYUsuariosNuevosEnTablasDefinitivas(string sn)
+        public static DataTable GrabacionMarcacionesYUsuariosNuevosEnTablasDefinitivas(string sn)
         {
             try
             {
