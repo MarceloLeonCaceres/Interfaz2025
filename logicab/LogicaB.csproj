@@ -58,6 +58,8 @@
     <Compile Include="clsLogicaRegistrosUSB.cs" />
     <Compile Include="clsLogicaSDK.cs" />
     <Compile Include="clsLogicaSeguridadInterfazRelojes.cs" />
+    <Compile Include="LogicaReloj.cs" />
+    <Compile Include="LogicaTarjetas.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
