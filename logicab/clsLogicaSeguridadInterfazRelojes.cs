@@ -19,15 +19,23 @@ namespace LogicaB
         public static bool EstaVigente()
         {
             DataTable dt = clsDatosSeguridadInterfazRelojes.FechasVigencia();
-            Utilitarios.ClsEncriptacion AuxCripto = new ClsEncriptacion();
             if (dt.Rows.Count == 0) return false;
 
             string vigenciaEncriptada = dt.Rows[0][0].ToString();
-            string sVigenciaDesencriptada = AuxCripto.Desencripta(vigenciaEncriptada);
+            Utilitarios.ClsEncriptacion AuxCripto = new ClsEncriptacion();
+            try
+            {
+                string sVigenciaDesencriptada = AuxCripto.Desencripta(vigenciaEncriptada);
 
-            DateTime fechaVigencia = Convert.ToDateTime(sVigenciaDesencriptada);
-            DateTime fechaActual = Convert.ToDateTime(dt.Rows[0][1].ToString());
-            return fechaActual < fechaVigencia;
+                DateTime fechaVigencia = Convert.ToDateTime(sVigenciaDesencriptada);
+                DateTime fechaActual = Convert.ToDateTime(dt.Rows[0][1].ToString());
+                return fechaActual < fechaVigencia;
+            }
+            catch (Exception ex)
+            {
+                return false;
+                //throw;
+            }
         }
 
         public static bool EstaVigente(DateTime fechaActual)
