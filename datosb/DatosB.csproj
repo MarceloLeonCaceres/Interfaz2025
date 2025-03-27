@@ -58,10 +58,14 @@
     <Compile Include="clsDatosRegistrosUSB.cs" />
     <Compile Include="clsDatosSDK.cs" />
     <Compile Include="clsDatosSeguridadInterfazRelojes.cs" />
+    <Compile Include="DatosTarjetas.cs" />
     <Compile Include="Models\MarcacionRelojModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="Dapper">
+      <Version>1.60.6</Version>
+    </PackageReference>
     <PackageReference Include="System.ValueTuple">
       <Version>4.5.0</Version>
     </PackageReference>
