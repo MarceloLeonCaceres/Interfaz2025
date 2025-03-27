@@ -23,19 +23,24 @@ namespace LogicaB
 
             string vigenciaEncriptada = dt.Rows[0][0].ToString();
             Utilitarios.ClsEncriptacion AuxCripto = new ClsEncriptacion();
+            string sVigenciaDesencriptada = "";
+            DateTime fechaVigencia ;
+            DateTime fechaActual ;
             try
             {
-                string sVigenciaDesencriptada = AuxCripto.Desencripta(vigenciaEncriptada);
+                sVigenciaDesencriptada = AuxCripto.Desencripta(vigenciaEncriptada);
 
-                DateTime fechaVigencia = Convert.ToDateTime(sVigenciaDesencriptada);
-                DateTime fechaActual = Convert.ToDateTime(dt.Rows[0][1].ToString());
-                return fechaActual < fechaVigencia;
             }
             catch (Exception ex)
             {
-                return false;
-                //throw;
+                sVigenciaDesencriptada = AuxCripto.DesEncriptaFechaVigencia(vigenciaEncriptada);
             }
+            finally
+            {
+                fechaVigencia = Convert.ToDateTime(sVigenciaDesencriptada);
+                fechaActual = Convert.ToDateTime(dt.Rows[0][1].ToString());
+            }
+            return fechaActual < fechaVigencia;
         }
 
         public static bool EstaVigente(DateTime fechaActual)
