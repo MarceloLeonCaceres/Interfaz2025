@@ -59,7 +59,8 @@ namespace DatosB
 	            [name] [nvarchar](60) NULL,
 	            [mverifypass] [nvarchar](100) NULL,
 	            [cardNumber] [nvarchar](20) NULL,
-	            [privilege] [smallint] NULL
+	            [privilege] [smallint] NULL,
+	            [enprivilege] [smallint] NULL
             );" + "\n";
 
             for (int i = 0; i < datosEmpleados.Rows.Count; i++)
@@ -70,21 +71,20 @@ namespace DatosB
                 string pwdEnReloj = encripter.Encripta(datosEmpleados.Rows[i]["password"].ToString());
 
                 sbQueryUsuarios.AppendLine($@"INSERT INTO #tmp_UsuariosBiometrico 
-                    ( pin, name, mverifypass, cardNumber, privilege ) VALUES (
+                    ( pin, name, mverifypass, cardNumber, privilege, enprivilege ) VALUES (
                     '{datosEmpleados.Rows[i]["pin"].ToString()}', '{nombre}', '{pwdEnReloj}', 
-                    '{datosEmpleados.Rows[i]["cardNumber"]}', {datosEmpleados.Rows[i]["privilege"]} );");
+                    '{datosEmpleados.Rows[i]["cardNumber"]}', {datosEmpleados.Rows[i]["privilege"]}, {datosEmpleados.Rows[i]["enprivilege"]} );");
             }
-
 
 
             string sqlMergeUserinfo = @"SET NOCOUNT ON;
 MERGE USERINFO AS Target
     USING #tmp_UsuariosBiometrico AS Source on Target.Badgenumber = Source.pin
 WHEN MATCHED THEN 
-    UPDATE SET Target.mverifypass = Source.mverifypass, Target.cardNo = Source.cardNumber, Target.emPrivilege = Source.privilege
+    UPDATE SET Target.mverifypass = Source.mverifypass, Target.cardNo = Source.cardNumber, Target.Privilege = Source.privilege, Target.emPrivilege = Source.enprivilege
 WHEN NOT MATCHED THEN
-    INSERT (Badgenumber, name, mVerifyPass, cardNo, EMPrivilege, DefaultDeptId)
-    VALUES (Source.pin, Source.name, Source.mverifypass, Source.cardNumber, Source.privilege, 
+    INSERT (Badgenumber, name, mVerifyPass, cardNo, EMPrivilege, privilege, DefaultDeptId)
+    VALUES (Source.pin, Source.name, Source.mverifypass, Source.cardNumber, Source.enprivilege, Source.privilege,
                 (select deptid from DEPARTMENTS where SUPDEPTID = 0) );";
 
             ClsAccesoDatos.EjecutaNoQuery(sqlCreaTablaTemporal + sbQueryUsuarios.ToString() + sqlMergeUserinfo);
