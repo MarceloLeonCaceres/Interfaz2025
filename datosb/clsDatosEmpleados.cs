@@ -224,5 +224,15 @@ namespace DatosB
             return ClsAccesoDatos.RetornaDataTable(query);
         }
 
+        public static DataTable GetTodosEmpleadosParaEnviarAReloj()
+        {
+            string query = @"SELECT Badgenumber, [NAME], cardNo,  
+                case when cardNo > 0 then '*****' else '' end as TarjetaProximidad, 
+		        mverifyPass, case when Len(mverifyPass) > 0 then '*****' else '' end as [Contrasenia], 
+                privilege, emPrivilege
+                FROM USERINFO
+                WHERE DEFAULTDEPTID > 0";
+            return ClsAccesoDatos.RetornaDataTable(query);
+        }
     }
 }

@@ -66,6 +66,22 @@ namespace LogicaB
                 throw new clsLogicaException(ex.Message);
             }
         }
+        public static DataTable GetTodosEmpleadosParaEnviarAReloj()
+        {
+            try
+            {
+                return clsDatosEmpleados.GetTodosEmpleadosParaEnviarAReloj();
+            }
+            catch (clsDataBaseException errBdd)
+            {
+                throw new clsLogicaException(errBdd.DataErrorDescription);
+            }
+            catch (Exception ex)
+            {
+                throw new clsLogicaException(ex.Message);
+            }
+        }
+        
         public static void AgregaNuevoEmpleado()
         {
             string sMaxCodigo = clsDatosEmpleados.RetornaMaxCodigo();
