@@ -1,12 +1,9 @@
-﻿using System;
+﻿using ConexionDatos;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Data;
+using System.Text;
 using Utilitarios;
-using ConexionDatos;
-using DatosB.Models;
 
 namespace DatosB
 {
@@ -92,7 +89,7 @@ namespace DatosB
             consulta = @"SELECT COUNT(*) FROM USERINFO 
                 WHERE USERID <> " + id.ToString() + " AND BADGENUMBER = '" + badge + "'";
 
-            return ClsAccesoDatos.EjecutaEscalar(consulta);            
+            return ClsAccesoDatos.EjecutaEscalar(consulta);
         }
 
 
@@ -118,7 +115,7 @@ namespace DatosB
         {
             string consulta;
             consulta = @"UPDATE USERINFO
-                SET Badgenumber = '"+ lBadgenumber + "', Name = '"+ sNombre + "', SSN = '"+ sSsn + "' " +
+                SET Badgenumber = '" + lBadgenumber + "', Name = '" + sNombre + "', SSN = '" + sSsn + "' " +
                 "WHERE USERID = " + id.ToString();
 
             try

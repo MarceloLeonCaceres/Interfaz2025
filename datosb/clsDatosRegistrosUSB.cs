@@ -1,8 +1,8 @@
-﻿using System;
+﻿using ConexionDatos;
+using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Text;
-using ConexionDatos;
 using Utilitarios;
 
 namespace DatosB
@@ -83,7 +83,7 @@ namespace DatosB
             List<string> lstValues = new List<string>();
             foreach (var registro in listaTuplas)
             {
-                lstValues.Add("('" + registro.Item1 + "', '" + registro.Item2 + " " + registro.Item3 + "', '0', '" + registro.Item5 + "', '" + registro.Item6 + "', '" + registro.Item7 + "', '" + sn + "')");                                
+                lstValues.Add("('" + registro.Item1 + "', '" + registro.Item2 + " " + registro.Item3 + "', '0', '" + registro.Item5 + "', '" + registro.Item6 + "', '" + registro.Item7 + "', '" + sn + "')");
             }
             queryHuellas.Append(string.Join(",\n", lstValues));
             try
@@ -168,7 +168,7 @@ namespace DatosB
 			    inner join [#CheckTypes] CT ON Tmp.[Verify State] = CT.[int])";
 
                 n = ClsAccesoDatos.IntEjecutaEscalar(consulta, lstPasos);
-                
+
             }
             catch (clsDataBaseException error)
             {
@@ -181,6 +181,6 @@ namespace DatosB
 
             return n;
         }
-        
+
     }
 }

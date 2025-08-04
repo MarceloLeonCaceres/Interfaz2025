@@ -1,15 +1,15 @@
-﻿using System;
+﻿using ConexionDatos;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Windows.Forms;
-using ConexionDatos;
 
 namespace DatosB
 {
     public class clsDatosBioBan
     {
-        
+
         // ConexionDatos.ClsAccesoDatos oDatos = new ClsAccesoDatos();
 
         public DataTable dtUsuarioRelojS(string sBusqueda, string CodUniCompu)
