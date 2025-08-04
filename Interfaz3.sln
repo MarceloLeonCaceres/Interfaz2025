@@ -1,0 +1,61 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.10.35013.160
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Interfaz3", "Interfaz3.csproj", "{3BC0F05F-E5AA-4043-84F6-55ADE287A9BC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LogicaB", "..\LogicaB\LogicaB.csproj", "{815C2B28-810F-4FCD-9D35-49B669F98910}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DatosB", "..\DatosB\DatosB.csproj", "{4191EC33-E787-4587-8638-F922A8869FD4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConexionDatos", "..\..\Soluciones Comunes\ConexionDatos\ConexionDatos.csproj", "{496264B6-B3C3-452C-9BCC-5C3919AA3F5D}"
+EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Setup", "..\SetupAdminBiometricos\Setup\Setup.vdproj", "{C9E5694F-E6AF-4E25-BBDE-CAEAABC8AF4E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{D03A2077-3CEA-4E78-B42C-DBFA39CF1981}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Installer", "Installer", "{01A5C2C3-7F39-43A8-860B-A1071653887F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WindowsFormsOrchestrator", "..\Tests\SDKTests\WindowsFormsOrchestrator\WindowsFormsOrchestrator.csproj", "{3BE98754-B5CA-4F42-8CCB-195C5F1CE6FD}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3BC0F05F-E5AA-4043-84F6-55ADE287A9BC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3BC0F05F-E5AA-4043-84F6-55ADE287A9BC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3BC0F05F-E5AA-4043-84F6-55ADE287A9BC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3BC0F05F-E5AA-4043-84F6-55ADE287A9BC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{815C2B28-810F-4FCD-9D35-49B669F98910}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{815C2B28-810F-4FCD-9D35-49B669F98910}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{815C2B28-810F-4FCD-9D35-49B669F98910}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{815C2B28-810F-4FCD-9D35-49B669F98910}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4191EC33-E787-4587-8638-F922A8869FD4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4191EC33-E787-4587-8638-F922A8869FD4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4191EC33-E787-4587-8638-F922A8869FD4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4191EC33-E787-4587-8638-F922A8869FD4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{496264B6-B3C3-452C-9BCC-5C3919AA3F5D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{496264B6-B3C3-452C-9BCC-5C3919AA3F5D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{496264B6-B3C3-452C-9BCC-5C3919AA3F5D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{496264B6-B3C3-452C-9BCC-5C3919AA3F5D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C9E5694F-E6AF-4E25-BBDE-CAEAABC8AF4E}.Debug|Any CPU.ActiveCfg = Debug
+		{C9E5694F-E6AF-4E25-BBDE-CAEAABC8AF4E}.Release|Any CPU.ActiveCfg = Release
+		{3BE98754-B5CA-4F42-8CCB-195C5F1CE6FD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3BE98754-B5CA-4F42-8CCB-195C5F1CE6FD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3BE98754-B5CA-4F42-8CCB-195C5F1CE6FD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3BE98754-B5CA-4F42-8CCB-195C5F1CE6FD}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{C9E5694F-E6AF-4E25-BBDE-CAEAABC8AF4E} = {01A5C2C3-7F39-43A8-860B-A1071653887F}
+		{3BE98754-B5CA-4F42-8CCB-195C5F1CE6FD} = {D03A2077-3CEA-4E78-B42C-DBFA39CF1981}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A01BBE5C-86D3-4A32-AF80-2E6EF80F93E2}
+	EndGlobalSection
+EndGlobal
