@@ -3,21 +3,25 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.10.35013.160
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Interfaz3", "Interfaz3.csproj", "{3BC0F05F-E5AA-4043-84F6-55ADE287A9BC}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LogicaB", "..\LogicaB\LogicaB.csproj", "{815C2B28-810F-4FCD-9D35-49B669F98910}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DatosB", "..\DatosB\DatosB.csproj", "{4191EC33-E787-4587-8638-F922A8869FD4}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConexionDatos", "..\..\Soluciones Comunes\ConexionDatos\ConexionDatos.csproj", "{496264B6-B3C3-452C-9BCC-5C3919AA3F5D}"
-EndProject
-Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Setup", "..\SetupAdminBiometricos\Setup\Setup.vdproj", "{C9E5694F-E6AF-4E25-BBDE-CAEAABC8AF4E}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{D03A2077-3CEA-4E78-B42C-DBFA39CF1981}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Installer", "Installer", "{01A5C2C3-7F39-43A8-860B-A1071653887F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WindowsFormsOrchestrator", "..\Tests\SDKTests\WindowsFormsOrchestrator\WindowsFormsOrchestrator.csproj", "{3BE98754-B5CA-4F42-8CCB-195C5F1CE6FD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Interfaz3", "Interfaz3\Interfaz3.csproj", "{3BC0F05F-E5AA-4043-84F6-55ADE287A9BC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LogicaB", "LogicaB\LogicaB.csproj", "{815C2B28-810F-4FCD-9D35-49B669F98910}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DatosB", "DatosB\DatosB.csproj", "{4191EC33-E787-4587-8638-F922A8869FD4}"
+EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Setup", "SetupAdminBiometricos\Setup\Setup.vdproj", "{2FAD38DF-A4CC-347C-97FE-A30CAB67ACAE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DatosB.Tests.Unit", "Tests\DatosB.Tests\DatosB.Tests.Unit\DatosB.Tests.Unit\DatosB.Tests.Unit.csproj", "{E08654F2-24D1-48F9-8DD4-90F467DE8F7D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MUnitTest.Framework4.8", "Tests\DatosB.Tests\MUnit.Tests.Fx4.8\MUnitTest.Framework4.8\MUnitTest.Framework4.8.csproj", "{66318FBD-61DC-4A18-B12E-7F3D28C854EE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Interfaz3.Tests.Unit", "Tests\SDKTests\Interfaz3.Tests.Unit\Interfaz3.Tests.Unit.csproj", "{837F4589-49FA-42DC-8648-9D3E8347201F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WindowsFormsOrchestrator", "Tests\SDKTests\WindowsFormsOrchestrator\WindowsFormsOrchestrator.csproj", "{3BE98754-B5CA-4F42-8CCB-195C5F1CE6FD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -37,12 +41,22 @@ Global
 		{4191EC33-E787-4587-8638-F922A8869FD4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4191EC33-E787-4587-8638-F922A8869FD4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4191EC33-E787-4587-8638-F922A8869FD4}.Release|Any CPU.Build.0 = Release|Any CPU
-		{496264B6-B3C3-452C-9BCC-5C3919AA3F5D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{496264B6-B3C3-452C-9BCC-5C3919AA3F5D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{496264B6-B3C3-452C-9BCC-5C3919AA3F5D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{496264B6-B3C3-452C-9BCC-5C3919AA3F5D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C9E5694F-E6AF-4E25-BBDE-CAEAABC8AF4E}.Debug|Any CPU.ActiveCfg = Debug
-		{C9E5694F-E6AF-4E25-BBDE-CAEAABC8AF4E}.Release|Any CPU.ActiveCfg = Release
+		{2FAD38DF-A4CC-347C-97FE-A30CAB67ACAE}.Debug|Any CPU.ActiveCfg = Debug
+		{2FAD38DF-A4CC-347C-97FE-A30CAB67ACAE}.Debug|Any CPU.Build.0 = Debug
+		{2FAD38DF-A4CC-347C-97FE-A30CAB67ACAE}.Release|Any CPU.ActiveCfg = Release
+		{2FAD38DF-A4CC-347C-97FE-A30CAB67ACAE}.Release|Any CPU.Build.0 = Release
+		{E08654F2-24D1-48F9-8DD4-90F467DE8F7D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E08654F2-24D1-48F9-8DD4-90F467DE8F7D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E08654F2-24D1-48F9-8DD4-90F467DE8F7D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E08654F2-24D1-48F9-8DD4-90F467DE8F7D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{66318FBD-61DC-4A18-B12E-7F3D28C854EE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{66318FBD-61DC-4A18-B12E-7F3D28C854EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{66318FBD-61DC-4A18-B12E-7F3D28C854EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{66318FBD-61DC-4A18-B12E-7F3D28C854EE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{837F4589-49FA-42DC-8648-9D3E8347201F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{837F4589-49FA-42DC-8648-9D3E8347201F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{837F4589-49FA-42DC-8648-9D3E8347201F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{837F4589-49FA-42DC-8648-9D3E8347201F}.Release|Any CPU.Build.0 = Release|Any CPU
 		{3BE98754-B5CA-4F42-8CCB-195C5F1CE6FD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{3BE98754-B5CA-4F42-8CCB-195C5F1CE6FD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3BE98754-B5CA-4F42-8CCB-195C5F1CE6FD}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -52,7 +66,10 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{C9E5694F-E6AF-4E25-BBDE-CAEAABC8AF4E} = {01A5C2C3-7F39-43A8-860B-A1071653887F}
+		{2FAD38DF-A4CC-347C-97FE-A30CAB67ACAE} = {01A5C2C3-7F39-43A8-860B-A1071653887F}
+		{E08654F2-24D1-48F9-8DD4-90F467DE8F7D} = {D03A2077-3CEA-4E78-B42C-DBFA39CF1981}
+		{66318FBD-61DC-4A18-B12E-7F3D28C854EE} = {D03A2077-3CEA-4E78-B42C-DBFA39CF1981}
+		{837F4589-49FA-42DC-8648-9D3E8347201F} = {D03A2077-3CEA-4E78-B42C-DBFA39CF1981}
 		{3BE98754-B5CA-4F42-8CCB-195C5F1CE6FD} = {D03A2077-3CEA-4E78-B42C-DBFA39CF1981}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
