@@ -1,0 +1,30 @@
+BIO_USUARIOS
+---------------------------
+ID_Usuario      int (10)        Requerido
+Pin             varchar(10)     Requerido
+Nombre          varchar(40)     Null
+Observacion     varchar(40)     Null
+ID_Departamento int (10)        Null
+Main_Biometrico int (10)        Not Null
+Tipo_Usuario    int (1)         Not Null    REF /// 0 = Normal, 1 = Descargador, 2 = Administrador
+Password        varchar(100)    Null
+Estado          int (1)         Not Null    REF /// 0 = Inactivo, 1 = Activo
+* Foto
+
+BIO_DEPARTAMENTOS
+-------------------------------
+ID_Departamento     int (10)        Requerido
+Nombre              varchar(60)     Requerido
+Sup_Departamento    int (10)        Not Null
+Main_Biometrico     int (10)        Not Null
+
+
+BIO_RELOJES
+---------------------------------
+ID_Reloj            int (10)        Requerido
+Nombre              varchar (500)   Requerido
+IP                  varchar(15)     Requerido
+Puerto              int (6)         Requerido
+SN                  varchar (20)    Requerido
+Security            varchar (100)   Null
+Tipo_SDK            int (1)         Requerido   REF /// 0 = ZK, 1 = BioSmart Temperatura
