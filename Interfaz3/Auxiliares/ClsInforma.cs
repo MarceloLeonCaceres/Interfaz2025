@@ -27,7 +27,7 @@ namespace AdminDispositivosBiometricos
             dgvBitacora.Refresh();
         }
 
-        public static void notificaRespuestaBddBitacora(DataGridView dgvBitacora, string sn, string sEquipoActual, int respuesta, string msjExito, bool ambos = true, int orden = 0, int idProceso = 0)
+        public static void NotificaRespuestaBddBitacora(DataGridView dgvBitacora, string sn, string sEquipoActual, int respuesta, string msjExito, bool ambos = true, int orden = 0, int idProceso = 0)
         {
             clsLogicaSDK oLogAuditoria = new clsLogicaSDK();
             try

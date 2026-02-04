@@ -351,7 +351,8 @@ VALUES('" + fila.Cells["User ID"].Value + "', '" + fila.Cells["Verify Date"].Val
                
         }
 
-        public void RegistraLogEventoBdd(int orden, string sn, int idProceso, string sTarea, string sTareaDetallada)
+        public void RegistraLogEventoBdd(int orden, string sn, 
+            int idProceso, string sTarea, string sTareaDetallada)
         {
             try
             {

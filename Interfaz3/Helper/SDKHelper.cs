@@ -4810,7 +4810,7 @@ namespace SDK
             retorno.respuesta = ret;
             return retorno;
         }
-        public async Task<clsIntString> bio_LeeMarcaciones(DataTable dt_log, DataGridView dgvUserinfo)
+        public clsIntString bio_LeeMarcaciones(DataTable dt_log, DataGridView dgvUserinfo)
         {
             clsIntString retorno = new clsIntString();
             string sSN = "";
@@ -4855,7 +4855,7 @@ namespace SDK
             LogHelpers.ReportaNovedad($"Serial Number {sSN}");
 
             // Lee los usuarios por si acaso haya usuarios nuevos con nombres
-            await Task.Run( () => axCZKEM1.ReadAllUserID(iMachineNumber));  //read all the user information to the memory  except fingerprint Templates
+            axCZKEM1.ReadAllUserID(iMachineNumber);  //read all the user information to the memory  except fingerprint Templates
             LogHelpers.ReportaNovedad("Leyó usuarios del reloj");
 
             //Dictionary<string, string> TarjetaDe = new Dictionary<string, string>();
@@ -4928,7 +4928,9 @@ namespace SDK
                 ret = 1;
                 retorno.respuesta = 1;
                 if (sbMarcacionesDefectuosas.Length > 0)
+                {
                     LogHelpers.DescribeError(sbMarcacionesDefectuosas.ToString(), sSN);
+                }
 
             }
             else
@@ -4936,9 +4938,11 @@ namespace SDK
                 axCZKEM1.GetLastError(ref idwErrorCode);
                 ret = idwErrorCode;
                 retorno.respuesta = idwErrorCode;
+                LogHelpers.ReportaNovedad($"Error {idwErrorCode.ToString()} en Lectura General de LogData");
             }
 
             axCZKEM1.EnableDevice(GetMachineNumber(), true);
+            LogHelpers.ReportaNovedad($"Activa reloj {sSN}");
             return retorno;
         }
 

@@ -497,7 +497,7 @@ namespace AdminDispositivosBiometricos
                     //respuesta = reloj.sta_batch_SetAllUserFPInfo(this.PrgSTA, dgvTemporal);
                     respuesta = formaEnvio(this.PrgSTA, dgvTemporal);
 
-                    ClsInforma.notificaRespuestaBddBitacora(dgvBitacora, sn, sEquipoActual, respuesta, "Fin carga rápida");
+                    ClsInforma.NotificaRespuestaBddBitacora(dgvBitacora, sn, sEquipoActual, respuesta, "Fin carga rápida");
                     if (respuesta == -1024)
                     {
                         return;
@@ -515,7 +515,7 @@ namespace AdminDispositivosBiometricos
                 {
                     return;
                 }
-                ClsInforma.notificaRespuestaBddBitacora(dgvBitacora, sn, sEquipoActual, respuesta, "Fin carga rápida");
+                ClsInforma.NotificaRespuestaBddBitacora(dgvBitacora, sn, sEquipoActual, respuesta, "Fin carga rápida");
                 dgvBitacora.Refresh();
             }
         }
@@ -525,18 +525,18 @@ namespace AdminDispositivosBiometricos
         #region Descarga Marcaciones
 
 
-        private async void tsbDescargar_Click(object sender, EventArgs e)
+        private void tsbDescargar_Click(object sender, EventArgs e)
         {
             
             tsbDescargar.Enabled = false;
             Cursor = Cursors.WaitCursor;
             
-            await DescargarMarcaciones();
+            DescargarMarcaciones();
             tsbDescargar.Enabled = true;
             Cursor = Cursors.Default;
         }
 
-        private async Task DescargarMarcaciones()
+        private void DescargarMarcaciones()
         {
             DataTable dt_Marcaciones = Prepara_Tabla_y_GridView();
             clsIntString respuestaSsn = new clsIntString();
@@ -547,17 +547,17 @@ namespace AdminDispositivosBiometricos
 
             try
             {
-                ClsInforma.notificaRespuestaBddBitacora(dgvBitacora, "", sEquipoActual, 2, "Inicio de Lectura de marcaciones");
-                respuestaSsn = await reloj.bio_LeeMarcaciones(dt_Marcaciones, dgvUserinfo);
+                ClsInforma.NotificaRespuestaBddBitacora(dgvBitacora, "", sEquipoActual, 2, "Inicio de Lectura de marcaciones");
+                respuestaSsn = reloj.bio_LeeMarcaciones(dt_Marcaciones, dgvUserinfo);
                 sn = respuestaSsn.sn;
 
                 if (respuestaSsn.respuesta != 1 || dt_Marcaciones.Rows.Count == 0)
                 {
-                    ClsInforma.notificaRespuestaBddBitacora(dgvBitacora, sn, sEquipoActual, respuestaSsn.respuesta, "");
+                    ClsInforma.NotificaRespuestaBddBitacora(dgvBitacora, sn, sEquipoActual, respuestaSsn.respuesta, "");
                 }
                 else
                 {
-                    ClsInforma.notificaRespuestaBddBitacora(dgvBitacora, sn, sEquipoActual, respuestaSsn.respuesta, "Las marcaciones del reloj han sido leidas: " + dt_Marcaciones.Rows.Count.ToString());
+                    ClsInforma.NotificaRespuestaBddBitacora(dgvBitacora, sn, sEquipoActual, respuestaSsn.respuesta, "Las marcaciones del reloj han sido leidas: " + dt_Marcaciones.Rows.Count.ToString());
                     GuardarMarcacionesConUsuariosNuevos(gv_Attlog, dgvUserinfo, sn);
                 }
             }
@@ -614,7 +614,7 @@ namespace AdminDispositivosBiometricos
                 ActualizaProgressBarInvoke(100, PrgSTA);
 
                 string sMensaje = dtNewMarcaciones.Rows.Count == 1 ? "Se guardó 1 marcación nueva" : "Se guardaron " + dtNewMarcaciones.Rows.Count.ToString() + " marcaciones nuevas";
-                ClsInforma.notificaRespuestaBddBitacora(dgvBitacora, sn, sEquipoActual, 1, sMensaje);
+                ClsInforma.NotificaRespuestaBddBitacora(dgvBitacora, sn, sEquipoActual, 1, sMensaje);
                 MessageBox.Show(sMensaje, "Grabación Correcta", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 PrgSTA.Visible = false;
             }
@@ -666,7 +666,7 @@ namespace AdminDispositivosBiometricos
                 progress?.Report(100);
 
                 string sMensaje = dtNewMarcaciones.Rows.Count == 1 ? "Se guardó 1 marcación nueva" : "Se guardaron " + dtNewMarcaciones.Rows.Count.ToString() + " marcaciones nuevas";
-                ClsInforma.notificaRespuestaBddBitacora(dgvBitacora, sn, sEquipoActual, 1, sMensaje);
+                ClsInforma.NotificaRespuestaBddBitacora(dgvBitacora, sn, sEquipoActual, 1, sMensaje);
                 MessageBox.Show(sMensaje, "Grabación Correcta", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (clsLogicaException error)
@@ -702,7 +702,7 @@ namespace AdminDispositivosBiometricos
             {
                 Cursor = Cursors.WaitCursor;
                 int resultado = reloj.sta_ClearAdmin();
-                ClsInforma.notificaRespuestaBddBitacora(dgvBitacora, sn, sEquipoActual, resultado, "Se borraron los administradores");
+                ClsInforma.NotificaRespuestaBddBitacora(dgvBitacora, sn, sEquipoActual, resultado, "Se borraron los administradores");
                 Cursor = Cursors.Default;
             }
 
@@ -715,7 +715,7 @@ namespace AdminDispositivosBiometricos
             {
                 Cursor = Cursors.WaitCursor;
                 int resultado = reloj.sta_ClearAllLogs();
-                ClsInforma.notificaRespuestaBddBitacora(dgvBitacora, sn, sEquipoActual, resultado, "Se borraron todos los registros");
+                ClsInforma.NotificaRespuestaBddBitacora(dgvBitacora, sn, sEquipoActual, resultado, "Se borraron todos los registros");
                 Cursor = Cursors.Default;
             }
 
@@ -728,7 +728,7 @@ namespace AdminDispositivosBiometricos
             {
                 Cursor = Cursors.WaitCursor;
                 int resultado = reloj.sta_ClearAllFps();
-                ClsInforma.notificaRespuestaBddBitacora(dgvBitacora, sn, sEquipoActual, resultado, "Se borraron todas las huellas");
+                ClsInforma.NotificaRespuestaBddBitacora(dgvBitacora, sn, sEquipoActual, resultado, "Se borraron todas las huellas");
                 Cursor = Cursors.Default;
             }
 
@@ -741,7 +741,7 @@ namespace AdminDispositivosBiometricos
             {
                 Cursor = Cursors.WaitCursor;
                 int resultado = reloj.sta_ClearAllUsers();
-                ClsInforma.notificaRespuestaBddBitacora(dgvBitacora, sn, sEquipoActual, resultado, "Se borraron todos los usuarios");
+                ClsInforma.NotificaRespuestaBddBitacora(dgvBitacora, sn, sEquipoActual, resultado, "Se borraron todos los usuarios");
                 Cursor = Cursors.Default;
             }
 
@@ -754,7 +754,7 @@ namespace AdminDispositivosBiometricos
             {
                 Cursor = Cursors.WaitCursor;
                 int resultado = reloj.sta_ClearAllData();
-                ClsInforma.notificaRespuestaBddBitacora(dgvBitacora, sn, sEquipoActual, resultado, "Se borraron todos los datos");
+                ClsInforma.NotificaRespuestaBddBitacora(dgvBitacora, sn, sEquipoActual, resultado, "Se borraron todos los datos");
                 Cursor = Cursors.Default;
             }
 
@@ -767,7 +767,7 @@ namespace AdminDispositivosBiometricos
             {
                 Cursor = Cursors.WaitCursor;
                 respuesta = reloj.sta_DeleteAttLog();
-                ClsInforma.notificaRespuestaBddBitacora(dgvBitacora, sn, sEquipoActual, respuesta, "Se borraron los registros de asistencia");
+                ClsInforma.NotificaRespuestaBddBitacora(dgvBitacora, sn, sEquipoActual, respuesta, "Se borraron los registros de asistencia");
                 Cursor = Cursors.Default;
             }
 
@@ -779,7 +779,7 @@ namespace AdminDispositivosBiometricos
         {
             Cursor = Cursors.WaitCursor;
             int resultado = reloj.sta_SYNCTime();
-            ClsInforma.notificaRespuestaBddBitacora(dgvBitacora, sn, sEquipoActual, resultado, "La hora del equipo está sincronizada");
+            ClsInforma.NotificaRespuestaBddBitacora(dgvBitacora, sn, sEquipoActual, resultado, "La hora del equipo está sincronizada");
             Cursor = Cursors.Default;
         }
 
@@ -788,7 +788,7 @@ namespace AdminDispositivosBiometricos
             Cursor = Cursors.WaitCursor;
             DateTime fechaActual;
             int resultado = reloj.sta_GetDeviceTime(lbDeviceTime, out fechaActual);
-            ClsInforma.notificaRespuestaBddBitacora(dgvBitacora, sn, sEquipoActual, resultado, "Se leyó la hora del equipo");
+            ClsInforma.NotificaRespuestaBddBitacora(dgvBitacora, sn, sEquipoActual, resultado, "Se leyó la hora del equipo");
             Cursor = Cursors.Default;
         }
 
@@ -796,7 +796,7 @@ namespace AdminDispositivosBiometricos
         {
             Cursor = Cursors.WaitCursor;
             int resultado = reloj.sta_SetDeviceTime((DateTime)dtDeviceTime.Value);
-            ClsInforma.notificaRespuestaBddBitacora(dgvBitacora, sn, sEquipoActual, resultado, "Se cambió la hora del equipo");
+            ClsInforma.NotificaRespuestaBddBitacora(dgvBitacora, sn, sEquipoActual, resultado, "Se cambió la hora del equipo");
             Cursor = Cursors.Default;
         }
 
@@ -804,7 +804,7 @@ namespace AdminDispositivosBiometricos
         {
             Cursor = Cursors.WaitCursor;
             int resultado = reloj.sta_btnRestartDevice();
-            ClsInforma.notificaRespuestaBddBitacora(dgvBitacora, sn, sEquipoActual, resultado, "El dispositivo se reinicia");
+            ClsInforma.NotificaRespuestaBddBitacora(dgvBitacora, sn, sEquipoActual, resultado, "El dispositivo se reinicia");
             Cursor = Cursors.Default;
             this.Close();
         }
@@ -813,7 +813,7 @@ namespace AdminDispositivosBiometricos
         {
             Cursor = Cursors.WaitCursor;
             int resultado = reloj.sta_btnPowerOffDevice();
-            ClsInforma.notificaRespuestaBddBitacora(dgvBitacora, sn, sEquipoActual, resultado, "El dispositivo se apagó");
+            ClsInforma.NotificaRespuestaBddBitacora(dgvBitacora, sn, sEquipoActual, resultado, "El dispositivo se apagó");
             Cursor = Cursors.Default;
             this.Close();
         }
@@ -981,11 +981,11 @@ namespace AdminDispositivosBiometricos
 
                 if (retorno.respuesta != 1 || dt_Marcaciones.Rows.Count == 0)
                 {
-                    ClsInforma.notificaRespuestaBddBitacora(dgvBitacora, retorno.sn, sEquipoActual, retorno.respuesta, "");
+                    ClsInforma.NotificaRespuestaBddBitacora(dgvBitacora, retorno.sn, sEquipoActual, retorno.respuesta, "");
                 }
                 else
                 {
-                    ClsInforma.notificaRespuestaBddBitacora(dgvBitacora, retorno.sn, sEquipoActual, retorno.respuesta, "Las marcaciones del reloj han sido leidas: " + dt_Marcaciones.Rows.Count.ToString());
+                    ClsInforma.NotificaRespuestaBddBitacora(dgvBitacora, retorno.sn, sEquipoActual, retorno.respuesta, "Las marcaciones del reloj han sido leidas: " + dt_Marcaciones.Rows.Count.ToString());
                     GuardarMarcaciones(gv_Attlog, dgvUserinfo, retorno.sn, progress, cancelToken);
                 }
             }
@@ -1190,7 +1190,7 @@ namespace AdminDispositivosBiometricos
                     if ((i + 1) % 500 == 0 && dgvTemporal.Count > 0)
                     {
                         respuesta = reloj.sta_SetAllUserFaceInfo(this.PrgSTA, dgvTemporal);
-                        ClsInforma.notificaRespuestaBddBitacora(dgvBitacora, sn, sEquipoActual, respuesta, "Fin carga rápida");
+                        ClsInforma.NotificaRespuestaBddBitacora(dgvBitacora, sn, sEquipoActual, respuesta, "Fin carga rápida");
                         if (respuesta == -1024)
                         {
                             return;
@@ -1204,7 +1204,7 @@ namespace AdminDispositivosBiometricos
                 if (dgvTemporal.Count > 0)
                 {
                     respuesta = reloj.sta_SetAllUserFaceInfo(this.PrgSTA, dgvTemporal);
-                    ClsInforma.notificaRespuestaBddBitacora(dgvBitacora, sn, sEquipoActual, respuesta, "Fin carga rostros");
+                    ClsInforma.NotificaRespuestaBddBitacora(dgvBitacora, sn, sEquipoActual, respuesta, "Fin carga rostros");
                     if (respuesta == -1024)
                     {
                         return;

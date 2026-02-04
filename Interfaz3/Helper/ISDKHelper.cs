@@ -15,7 +15,7 @@ namespace SDK
 
         int bio_GetAllUserInfo(DataGridView dgvUserInfo);
         string bio_GetNumeroDeSerie(out string sSN);
-        Task<clsIntString> bio_LeeMarcaciones(DataTable dt_log, DataGridView dgvUserinfo);
+        clsIntString bio_LeeMarcaciones(DataTable dt_log, DataGridView dgvUserinfo);
         clsIntString bio_LeeMarcaciones(IProgress<int> barraProgreso, Label etiqueta, DataTable dt_log, DataGridView dgvUserinfo, CancellationToken cancelToken);
         clsIntString bio_LeeMarcaciones_ProgressBar(ProgressBar progressB, DataTable dt_log, DataGridView dgvUserinfo, IProgress<int> progress, CancellationToken cancelToken, int nMarcaciones);
         int bio_TraeFPSeleccionados(List<string> lstEmpleados, DataGridView dgvUsuariosLeidos, out int numHuellas, out int numUsuarios);

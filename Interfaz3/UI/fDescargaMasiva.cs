@@ -38,7 +38,7 @@ namespace AdminDispositivosBiometricos
         }
 
 
-        public async void DescargaMarcacionesRelojes(List<ClsReloj> lstRelojes)
+        public void DescargaMarcacionesRelojes(List<ClsReloj> lstRelojes)
         {
 
             clsLogicaSDK oLog = new clsLogicaSDK();
@@ -46,25 +46,27 @@ namespace AdminDispositivosBiometricos
             clsIntString respuestaSsn = new clsIntString();
             respuestaSsn.respuesta = 0;
             int idProceso = oLog.iniciaProcesoMasivo(userAdmin);
-            string sMensaje = "";
-            
+            string sMensaje = "Inicio descarga masiva.";
+
+            string lstSn = string.Join(",", lstRelojes.Select(r => r.sSN).ToList());
+            oLog.RegistraLogEventoBdd(0, lstRelojes.Count.ToString(), idProceso, sMensaje, lstSn);
+
             oLog.InicializaTablasDescargaTemporales();
 
             foreach (ClsReloj reloj in lstRelojes)
             {
                 sEquipoActual = reloj.sNombreReloj;
                 respuestaSsn.sn = reloj.sSN;
-                sMensaje = $"Comunicándose con reloj {sn}";
+                sMensaje = $"Comunicándose con reloj {reloj.sSN}";
                 LogHelpers.ReportaNovedad(sMensaje);
                 oLog.RegistraLogEventoBdd(1, reloj.sSN, idProceso, reloj.sNombreReloj, sMensaje);
-
                 ClsInforma.ReportaBitacoraInvoke(sMensaje, dgvBitacora, reloj.sNombreReloj);
                 dgvBitacora.Refresh();
-                int ret = this.reloj.sta_ConnectTCP(reloj.sIP.ToString(), reloj.iPuerto.ToString(), "0");
-                reportaConexionDesconex(oLog, ret, idProceso, bEnviaBitacora);
+                int estadoConexion = this.reloj.sta_ConnectTCP(reloj.sIP.ToString(), reloj.iPuerto.ToString(), "0");
+                ReportaConexionDesconex(oLog, estadoConexion, idProceso, bEnviaBitacora);
                 dgvBitacora.Refresh();
 
-                if (ret != 1)
+                if (estadoConexion != 1)
                 {
                     LogHelpers.ReportaNovedad("Siguiente reloj (-1)");
                     continue;
@@ -76,15 +78,15 @@ namespace AdminDispositivosBiometricos
                 gv_Attlog.AutoGenerateColumns = true;
                 gv_Attlog.Columns.Clear();
 
-                respuestaSsn = await this.reloj.bio_LeeMarcaciones(dt_Marcaciones, dgvUserinfo);
-                ClsInforma.notificaRespuestaBddBitacora(dgvBitacora, reloj.sSN, reloj.sNombreReloj, respuestaSsn.respuesta, "Las marcaciones del reloj han sido leidas: " + dt_Marcaciones.Rows.Count.ToString(), bEnviaBitacora, 3, idProceso);
+                respuestaSsn = this.reloj.bio_LeeMarcaciones(dt_Marcaciones, dgvUserinfo);
+                ClsInforma.NotificaRespuestaBddBitacora(dgvBitacora, reloj.sSN, reloj.sNombreReloj, respuestaSsn.respuesta, "Las marcaciones del reloj han sido leidas: " + dt_Marcaciones.Rows.Count.ToString(), bEnviaBitacora, 3, idProceso);
                 dgvBitacora.Refresh();
 
                 oLog.RegistraLogEventoBdd(4, sn, idProceso, reloj.sNombreReloj, "Comunicándose con reloj ");
-                ret = this.reloj.sta_ConnectTCP(reloj.sIP.ToString(), reloj.iPuerto.ToString(), "0");
-                reportaConexionDesconex(oLog, ret, idProceso, bEnviaBitacora);
+                estadoConexion = this.reloj.sta_ConnectTCP(reloj.sIP.ToString(), reloj.iPuerto.ToString(), "0");
+                ReportaConexionDesconex(oLog, estadoConexion, idProceso, bEnviaBitacora);
                 dgvBitacora.Refresh();
-                if (ret != -2)
+                if (estadoConexion != -2)
                 {
                     LogHelpers.ReportaNovedad("Siguiente reloj (-2)");
                     continue;
@@ -98,28 +100,27 @@ namespace AdminDispositivosBiometricos
                     GuardarMarcacionesMasivas(dt_Marcaciones, dgvUserinfo, sn, reloj.sNombreReloj, idProceso);
                     dgvBitacora.Refresh();
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
-                    LogHelpers.ReportaNovedad("Siguiente reloj (exception)");
+                    LogHelpers.ReportaNovedad($"Siguiente reloj {ex.ToString()}");
+                    oLog.RegistraLogEventoBdd(4, sn, idProceso, reloj.sNombreReloj, ex.ToString());
                     continue;
                 }
-
             }
 
             LogHelpers.ReportaNovedad("Finaliza Descarga Relojes");
-
         }
 
-        private void reportaConexionDesconex(clsLogicaSDK oLog, int ret, int idProceso, bool ambos = true)
+        private void ReportaConexionDesconex(clsLogicaSDK oLog, int estadoConex, int idProceso, bool ambos = true)
         {
             string sMensaje = "";
-            if (ret == 1)
+            if (estadoConex == 1)
             {
                 sMensaje = "Conectado con reloj";
                 oLog.RegistraLogEventoBdd(2, sn, idProceso, sEquipoActual, sMensaje);
                 if (ambos) ClsInforma.ReportaBitacora(sMensaje, dgvBitacora, sEquipoActual);
             }
-            else if (ret == -2)
+            else if (estadoConex == -2)
             {
                 sMensaje = "Desconectado con reloj";
                 oLog.RegistraLogEventoBdd(5, sn, idProceso, sEquipoActual, sMensaje);
@@ -127,7 +128,7 @@ namespace AdminDispositivosBiometricos
             }
             else
             {
-                sMensaje = "No se pudo comunicar con el equipo. Error code: " + ret.ToString();
+                sMensaje = "No se pudo comunicar con el equipo. Error code: " + estadoConex.ToString();
                 oLog.RegistraLogEventoBdd(9, sn, idProceso, sEquipoActual, sMensaje);
                 EnviaCorreosError(idProceso, sEquipoActual);
                 if (ambos) ClsInforma.ReportaBitacora(sMensaje, dgvBitacora, sEquipoActual);
@@ -158,15 +159,15 @@ namespace AdminDispositivosBiometricos
                 oLog.GuardaUsuariosMasivos(dgvUserinfo);
                 dtNewMarcaciones = clsLogicaSDK.GrabacionMarcacionesYUsuariosNuevosEnTablasDefinitivas(sn);
                 string sMensaje = dtNewMarcaciones.Rows.Count == 1 ? "Se guardó 1 marcación nueva" : "Se guardaron " + dtNewMarcaciones.Rows.Count.ToString() + " marcaciones nuevas";
-                ClsInforma.notificaRespuestaBddBitacora(dgvBitacora, sn, sEquipoActual, 1, sMensaje, bEnviaBitacora, 7, idProceso);
+                ClsInforma.NotificaRespuestaBddBitacora(dgvBitacora, sn, sEquipoActual, 1, sMensaje, bEnviaBitacora, 7, idProceso);
             }
             catch (clsLogicaException lerror)
             {
-                ClsInforma.notificaRespuestaBddBitacora(dgvBitacora, sn, sEquipoActual, 1, lerror.logErrorDescription, bEnviaBitacora);
+                ClsInforma.NotificaRespuestaBddBitacora(dgvBitacora, sn, sEquipoActual, 1, lerror.logErrorDescription, bEnviaBitacora);
             }
             catch (Exception error)
             {
-                ClsInforma.notificaRespuestaBddBitacora(dgvBitacora, sn, sEquipoActual, 1, error.Message, bEnviaBitacora);
+                ClsInforma.NotificaRespuestaBddBitacora(dgvBitacora, sn, sEquipoActual, 1, error.Message, bEnviaBitacora);
             }
         }
 
