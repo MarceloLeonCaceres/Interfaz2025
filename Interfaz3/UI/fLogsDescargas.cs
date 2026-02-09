@@ -26,8 +26,11 @@ namespace AdminDispositivosBiometricos
 
         private void CargaDatos()
         {
-            DataTable dt = clsLogicaLogsDescargas.retornaLogs(100);
-            Utilitarios.ClsDataTableDgv.LlenaGridConDataTable(dt, dgvLogs, null);
+            BindingSource bindingSource = new BindingSource();
+            bindingSource.DataSource = clsLogicaLogsDescargas.retornaLogs(100);
+            dgvLogs.DataSource = bindingSource;
+            dgvLogs.Columns["LogTime"].DefaultCellStyle.Format = "dd/MM/yyyy HH:mm:ss.fff";
+
         }
 
 
