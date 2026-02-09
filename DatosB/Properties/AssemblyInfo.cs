@@ -5,8 +5,8 @@ using System.Runtime.InteropServices;
 // La información general de un ensamblado se controla mediante el siguiente 
 // conjunto de atributos. Cambie estos valores de atributo para modificar la información
 // asociada con un ensamblado.
-[assembly: AssemblyTitle("DatosB")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("Acceso Datos Interfaz Biométricos")]
+[assembly: AssemblyDescription("Acceso Datos Interfaz Biométricos")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("BioDevices Cia. Ltda.")]
 [assembly: AssemblyProduct("DatosB")]

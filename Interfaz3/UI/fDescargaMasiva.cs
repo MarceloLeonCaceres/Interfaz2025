@@ -37,7 +37,6 @@ namespace AdminDispositivosBiometricos
             InitializeComponent();
         }
 
-
         public void DescargaMarcacionesRelojes(List<ClsReloj> lstRelojes)
         {
 
@@ -57,6 +56,7 @@ namespace AdminDispositivosBiometricos
             {
                 sEquipoActual = reloj.sNombreReloj;
                 respuestaSsn.sn = reloj.sSN;
+                sn = reloj.sSN;
                 sMensaje = $"Comunicándose con reloj {reloj.sSN}";
                 LogHelpers.ReportaNovedad(sMensaje);
                 oLog.RegistraLogEventoBdd(1, reloj.sSN, idProceso, reloj.sNombreReloj, sMensaje);
