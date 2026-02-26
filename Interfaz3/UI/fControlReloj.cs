@@ -47,6 +47,8 @@ namespace AdminDispositivosBiometricos
         }
         private void fControlReloj_Load(object sender, EventArgs e)
         {
+            dgvNombresUsuarios.AutoGenerateColumns = false;
+
             try
             {
                 sEquipoActual = datosReloj.sNombreReloj;
@@ -336,7 +338,8 @@ namespace AdminDispositivosBiometricos
             ClsInforma.ReportaBitacora("Inicia lectura de huellas del dispositivo", dgvBitacora, sEquipoActual);
             
             DataTable dtEmpleados = PrepareColumnas.UsuariosBiometrico();
-            reloj.sta_GetAllUserFPInfo(dgvBitacora, PrgSTA, dgvLeeUsuarios, dtEmpleados, 0, lstEmpleadosChequedosDescarga);
+            reloj.sta_GetAllUserFPInfo(dgvBitacora, PrgSTA, dgvLeeUsuarios, dtEmpleados, 0, 
+                lstEmpleadosChequedosDescarga);
 
             if (dgvLeeUsuarios.RowCount == 0)
             {
@@ -435,15 +438,19 @@ namespace AdminDispositivosBiometricos
         {
             if (dgvUserFP.RowCount == 0)
             {
-                MessageBox.Show("No hay huellas para enviar al dispositivo.", "Atención", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                MessageBox.Show("No hay huellas para enviar al dispositivo.", "Atención", 
+                    MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;
             }
+
             int numeroHuellasAEnviar = dgvUserFP.SelectedRows.Count;
             if (numeroHuellasAEnviar == 0)
             {
-                MessageBox.Show("Debe seleccionar las huellas para enviar al dispositivo.", "Atención", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                MessageBox.Show("Debe seleccionar las huellas para enviar al dispositivo.", "Atención", 
+                    MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;
             }
+
             Cursor = Cursors.WaitCursor;
             PrgSTA.Visible = true;
             PrgSTA.Value = 0;
@@ -1409,7 +1416,7 @@ namespace AdminDispositivosBiometricos
             PrgSTA.Visible = true;
             PrgSTA.Value = 0;
             PrgSTA.Refresh();
-
+            
             List<SDKHelper.Employee> empleados = Mapper.ConvertToDesencriptedEmployees(dgvNombresUsuarios.SelectedRows);
             
             ClsInforma.ReportaBitacora("Inicio envío de usuarios a dispositivo", dgvBitacora, sEquipoActual);
