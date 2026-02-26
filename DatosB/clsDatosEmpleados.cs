@@ -223,7 +223,7 @@ namespace DatosB
 
         public static DataTable GetTodosEmpleadosParaEnviarAReloj()
         {
-            string query = @"SELECT Badgenumber, [NAME], cardNo,  
+            string query = @"SELECT Badgenumber as NumCA, [NAME] as NombreUsuario, cardNo,  
                 case when cardNo > 0 then '*****' else '' end as TarjetaProximidad, 
 		        mverifyPass, case when Len(mverifyPass) > 0 then '*****' else '' end as [Contrasenia], 
                 privilege, emPrivilege
