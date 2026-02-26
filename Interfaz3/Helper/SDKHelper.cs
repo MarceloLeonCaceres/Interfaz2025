@@ -1555,10 +1555,11 @@ namespace SDK
             }
             else
             {
+                HashSet<string> hsEmpleados = new HashSet<string>(codigosEmpleados);
+
                 while (axCZKEM1.SSR_GetAllUserInfo(iMachineNumber, out sEnrollNumber, out sName, out sPassword, out iPrivilege, out bEnabled))//get all the users' information from the memory
                 {
-
-                    if (codigosEmpleados.Contains(sEnrollNumber))
+                    if (hsEmpleados.Contains(sEnrollNumber))
                     {
                         axCZKEM1.GetStrCardNumber(out sCardnumber);//get the card number from the memory             
 
@@ -1976,7 +1977,8 @@ namespace SDK
         #endregion
 
         #region UserFace
-        public int sta_GetAllUserFaceInfo(DataGridView dgvBitacora, ProgressBar prgSta, DataGridView dgvUsuariosLeidos, int iOpcion = 0, List<string> lstEmpleados = null)
+        public int sta_GetAllUserFaceInfo(DataGridView dgvBitacora, ProgressBar prgSta, 
+            DataGridView dgvUsuariosLeidos, int iOpcion = 0, List<string> lstEmpleados = null)
         {
             if (GetConnectState() == false)
             {
@@ -2017,9 +2019,11 @@ namespace SDK
             }
             else
             {
+                HashSet<string> hsEmpleados = new HashSet<string>(lstEmpleados);
+
                 while (axCZKEM1.SSR_GetAllUserInfo(iMachineNumber, out sEnrollNumber, out sName, out sPassword, out iPrivilege, out bEnabled))//get all the users' information from the memory
                 {
-                    if (lstEmpleados.Contains(sEnrollNumber))
+                    if (hsEmpleados.Contains(sEnrollNumber))
                     {
                         if (axCZKEM1.GetUserFaceStr(iMachineNumber, sEnrollNumber, iFaceIndex, ref sTmpData, ref iLength))//get the face templates from the memory
                         {
@@ -4111,9 +4115,11 @@ namespace SDK
             //}
             //else
             //{
+            HashSet<string> hsEmpleados = new HashSet<string>(codigosEmpleados);
+
             while (axCZKEM1.SSR_GetAllUserInfo(iMachineNumber, out sEnrollNumber, out sName, out sPassword, out iPrivilege, out bEnabled))//get all the users' information from the memory
             {
-                if (codigosEmpleados.Contains(sEnrollNumber))
+                if (hsEmpleados.Contains(sEnrollNumber))
                 {
                     axCZKEM1.GetStrCardNumber(out sCardnumber);//get the card number from the memory             
 
