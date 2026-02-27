@@ -1415,14 +1415,13 @@ namespace AdminDispositivosBiometricos
             Cursor = Cursors.WaitCursor;
             PrgSTA.Visible = true;
             PrgSTA.Value = 0;
-            PrgSTA.Refresh();
-            
-            List<SDKHelper.Employee> empleados = Mapper.ConvertToDesencriptedEmployees(dgvNombresUsuarios.SelectedRows);
+            PrgSTA.Refresh();         
             
             ClsInforma.ReportaBitacora("Inicio envío de usuarios a dispositivo", dgvBitacora, sEquipoActual);
             dgvBitacora.Refresh();
             try
             {
+                List<SDKHelper.Employee> empleados = Mapper.ConvertToDesencriptedEmployees(dgvNombresUsuarios.SelectedRows);
                 reloj.sta_setEmployees(empleados);
             }
             catch (Exception ex)
