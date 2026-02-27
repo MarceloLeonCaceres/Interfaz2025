@@ -60,6 +60,7 @@
     <Compile Include="clsLogicaSeguridadInterfazRelojes.cs" />
     <Compile Include="LogicaReloj.cs" />
     <Compile Include="LogicaTarjetas.cs" />
+    <Compile Include="MarcacionImportService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -71,6 +72,10 @@
     <ProjectReference Include="..\DatosB\DatosB.csproj">
       <Project>{4191ec33-e787-4587-8638-f922a8869fd4}</Project>
       <Name>DatosB</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Domain\Domain.csproj">
+      <Project>{95157bc1-0df3-48a1-957e-724f997ab50b}</Project>
+      <Name>Domain</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
