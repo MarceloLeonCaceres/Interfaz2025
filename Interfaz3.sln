@@ -23,6 +23,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Interfaz3.Tests.Unit", "Tes
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WindowsFormsOrchestrator", "Tests\SDKTests\WindowsFormsOrchestrator\WindowsFormsOrchestrator.csproj", "{3BE98754-B5CA-4F42-8CCB-195C5F1CE6FD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain", "Domain\Domain.csproj", "{95157BC1-0DF3-48A1-957E-724F997AB50B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -61,6 +63,10 @@ Global
 		{3BE98754-B5CA-4F42-8CCB-195C5F1CE6FD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3BE98754-B5CA-4F42-8CCB-195C5F1CE6FD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3BE98754-B5CA-4F42-8CCB-195C5F1CE6FD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{95157BC1-0DF3-48A1-957E-724F997AB50B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{95157BC1-0DF3-48A1-957E-724F997AB50B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{95157BC1-0DF3-48A1-957E-724F997AB50B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{95157BC1-0DF3-48A1-957E-724F997AB50B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
