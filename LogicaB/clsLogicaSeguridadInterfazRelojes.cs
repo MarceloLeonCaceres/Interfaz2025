@@ -28,8 +28,8 @@ namespace LogicaB
             DateTime fechaActual ;
             try
             {
-                sVigenciaDesencriptada = AuxCripto.Desencripta(vigenciaEncriptada);
-
+                sVigenciaDesencriptada = AuxCripto.DesEncriptaFechaVigencia(vigenciaEncriptada);
+                //sVigenciaDesencriptada = AuxCripto.Desencripta(vigenciaEncriptada);
             }
             catch (Exception ex)
             {
