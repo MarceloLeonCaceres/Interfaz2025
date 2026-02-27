@@ -8,7 +8,7 @@
     <OutputType>WinExe</OutputType>
     <RootNamespace>AdminDispositivosBiometricos</RootNamespace>
     <AssemblyName>AdminRelojesBio</AssemblyName>
-    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
     <TargetFrameworkProfile />
@@ -300,10 +300,17 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Domain\Domain.csproj">
+      <Project>{95157BC1-0DF3-48A1-957E-724F997AB50B}</Project>
+      <Name>Domain</Name>
+    </ProjectReference>
     <ProjectReference Include="..\LogicaB\LogicaB.csproj">
       <Project>{815c2b28-810f-4fcd-9d35-49b669f98910}</Project>
       <Name>LogicaB</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="DTOs\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

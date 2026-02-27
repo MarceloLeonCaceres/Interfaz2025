@@ -1,18 +1,21 @@
-﻿using System;
+﻿using Domain;
+using LogicaB;
+using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 using System.Net;
+using System.Threading.Tasks;
 using System.Windows.Forms;
-using LogicaB;
 using Utilitarios;
 
 namespace AdminDispositivosBiometricos
 {
     public partial class fPrincipal : Form
     {
-
         DataTable dtRelojes = new DataTable();
-        private DataGridViewRow filaReloj;      
+        private DataGridViewRow filaReloj;
+        private const string SerialUsb = "1234567890123";
 
         public fPrincipal()
         {
@@ -37,9 +40,9 @@ namespace AdminDispositivosBiometricos
 
         public bool ConfirmaRelojEsValido(string snReloj)
         {
-            foreach(DataRow fila in dtRelojes.Rows)
+            foreach (DataRow fila in dtRelojes.Rows)
             {
-                if(snReloj == fila[0].ToString())
+                if (snReloj == fila[0].ToString())
                 {
                     return true;
                 }
@@ -51,7 +54,7 @@ namespace AdminDispositivosBiometricos
             string ip = string.IsNullOrWhiteSpace(filaReloj.Cells[2].Value.ToString()) ? "192.168.1.201" : filaReloj.Cells[2].Value.ToString();
             datosReloj.idReloj = Int32.Parse(filaReloj.Cells[0].Value.ToString());
             datosReloj.sNombreReloj = filaReloj.Cells[1].Value.ToString();
-            datosReloj.sIP = IPAddress.Parse(ip); 
+            datosReloj.sIP = IPAddress.Parse(ip);
             datosReloj.iPuerto = Int32.Parse(filaReloj.Cells[3].Value.ToString());
             datosReloj.iNumero = Int32.Parse(filaReloj.Cells[4].Value.ToString());
             datosReloj.sSN = filaReloj.Cells[5].Value.ToString();
@@ -83,7 +86,7 @@ namespace AdminDispositivosBiometricos
                 dtRelojes = oRelojes.dtRelojesValidos();
                 ClsDataTableDgv.LlenaGridConDataTable(dtRelojes, dgvRelojes, new List<string> { "ID" });
             }
-            catch(clsLogicaException errBdd)
+            catch (clsLogicaException errBdd)
             {
                 MessageBox.Show(errBdd.logErrorDescription, "Error con Base de Datos", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
@@ -96,7 +99,7 @@ namespace AdminDispositivosBiometricos
         private void ValidacionRelojes()
         {
 
-            clsLogicaDispositivos oLogDispositivos = new clsLogicaDispositivos();            
+            clsLogicaDispositivos oLogDispositivos = new clsLogicaDispositivos();
 
             // Inicio modificación para BAN Ecuador
             //DateTime fechaVigencia = oSeguridadFechaVigencia.retornaFechaVigencia();
@@ -109,7 +112,7 @@ namespace AdminDispositivosBiometricos
         private static bool DetectaVentanaAbierta(string nombreReloj)
         {
             bool abierto = false;
-            foreach(Form ventana in Application.OpenForms)
+            foreach (Form ventana in Application.OpenForms)
             {
                 if (ventana.Text.Contains(nombreReloj))
                 {
@@ -117,7 +120,7 @@ namespace AdminDispositivosBiometricos
                 }
             }
             return abierto;
-        }      
+        }
 
         private void tsbCorreos_Click(object sender, EventArgs e)
         {
@@ -141,38 +144,76 @@ namespace AdminDispositivosBiometricos
             vLogsDescargas.Show();
         }
 
-        private void tsbUSB_Click(object sender, EventArgs e)
+        private async void tsbUSB_Click(object sender, EventArgs e)
         {
 
             openFileDialog1.Filter = "Archivo de registros reloj biometrico|*.dat";
-            openFileDialog1.Title = "Seleccione un archivo de marcaciones";
+            openFileDialog1.Title = "Seleccione el archivo de marcaciones";
             openFileDialog1.Multiselect = false;
 
-            DialogResult respuesta = openFileDialog1.ShowDialog();
+            if (openFileDialog1.ShowDialog() != DialogResult.OK)
+                return;
 
-            switch (respuesta) {
-                case DialogResult.OK:
-                    string[] lines = System.IO.File.ReadAllLines(openFileDialog1.FileName);
-                    ImportaFilasDeArchivo(lines);
-                    break;
-                case DialogResult.Cancel:
-                    break;
-                default:
-                    MessageBox.Show("El formato del archivo seleccionado no corresponde a un archivo de marcaciones de reloj biométrico", "Archivo inválido", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                    break;
+            Cursor = Cursors.WaitCursor;
+            try
+            {
+                var parser = new MarcacionParser();
+                var service = new MarcacionImportService(parser);
+
+                var result = await Task.Run(() =>
+                    service.ImportFromFile(openFileDialog1.FileName));
+
+                if (result.Valid.Any())
+                {
+                    clsLogicaRegistrosUSB.GuardaRegistrosUsbEnTemporal(
+                        result.Valid, Config.EmpresaId);
+
+                    int inserted = clsLogicaRegistrosUSB.IngresaNuevasMarcaciones();
+
+                    MessageBox.Show(
+                        $"Se importaron {inserted} registros.\n" +
+                        $"{result.InvalidLines.Count} registros inválidos.",
+                        "Importación completada",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Information);
+                }
+                else
+                {
+                    MessageBox.Show("No se encontraron registros válidos.");
+                }
             }
-            
-            return;
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                Cursor = Cursors.Default;
+            }
+
+            //switch (respuesta) {
+            //    case DialogResult.OK:
+            //        IEnumerable<string> lines = System.IO.File.ReadLines(openFileDialog1.FileName);
+            //        ImportaFilasDeArchivo(lines);
+            //        break;
+            //    case DialogResult.Cancel:
+            //        break;
+            //    default:
+            //        MessageBox.Show("El formato del archivo seleccionado no corresponde a un archivo de marcaciones de reloj biométrico", 
+            //            "Archivo inválido", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+            //        break;
+            //}
+
         }
 
-        private void ImportaFilasDeArchivo(string[] lines)
+        private void ImportaFilasDeArchivo(IEnumerable<string> lines)
         {
             this.Cursor = Cursors.WaitCursor;
 
             //int counter = 0;
             char[] delimiterChars = { ' ', ',', '.', '\t' };
             //                     List<Tuple>(badge, fecha,  hora,   1,   ent_sal, hue_ros, workCode) registros = new List<Tuple>();
-            var lstRegistrosValidos = new List<Tuple<string, string, string, int, string, string, string>>();
+            var lstRegistrosValidos = new List<RegistroBiometrico>();
             var lstRegistrosNoValidos = new List<Tuple<string, string, string, int, string, string, string>>();
             try
             {
@@ -182,6 +223,11 @@ namespace AdminDispositivosBiometricos
                 {
                     // procesa la línea line
                     string[] param = line.Split(delimiterChars, StringSplitOptions.RemoveEmptyEntries);
+                    if (param.Length < 7)
+                    {
+                        lstRegistrosNoValidos.Add(Tuple.Create("", "", "", 0, "", "", ""));
+                        continue;
+                    }
                     if (DateTime.TryParse(param[1], out fecha))
                     {
                         if (fecha > DateTime.Now)
@@ -212,11 +258,11 @@ namespace AdminDispositivosBiometricos
                     // counter++;
                 }
                 if (lstRegistrosValidos.Count > 0)
-                    clsLogicaRegistrosUSB.GuardaRegistrosUsbEnTemporal(lstRegistrosValidos, "1234567890123");
+                    clsLogicaRegistrosUSB.GuardaRegistrosUsbEnTemporal(lstRegistrosValidos, SerialUsb);
                 lstRegistrosValidos.Clear();
                 int num = clsLogicaRegistrosUSB.IngresaNuevasMarcaciones();
                 clsLogicaRegistrosUSB.EnceraRegistrosUSB();
-                
+
                 MessageBox.Show(GetMensajeCargaCorrecta(num), "Registros vía USB", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (clsLogicaException errBdd)
