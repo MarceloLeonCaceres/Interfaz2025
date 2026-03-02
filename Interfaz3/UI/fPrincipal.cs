@@ -165,14 +165,30 @@ namespace AdminDispositivosBiometricos
 
                 if (result.Valid.Any())
                 {
-                    clsLogicaRegistrosUSB.GuardaRegistrosUsbEnTemporal(
-                        result.Valid, Config.EmpresaId);
 
-                    int inserted = clsLogicaRegistrosUSB.IngresaNuevasMarcaciones();
+                    int inserted = clsLogicaRegistrosUSB.IngresaMarcaciones(result.Valid, SerialUsb);
+
+                    string mensaje;
+
+                    switch (inserted)
+                    {
+                        case -2:
+                            mensaje = "Error inesperado, por favor contacte al proveedor de la aplicación para más detalles.";
+                            break;
+                        case -1:
+                            mensaje = "Error inesperado";
+                            break;
+                        case 0:
+                            mensaje = "No hay marcaciones nuevas";
+                            break;
+                        default:
+                            mensaje = $"Se importaron {inserted} registros.";
+                            break;
+                    }
 
                     MessageBox.Show(
-                        $"Se importaron {inserted} registros.\n" +
-                        $"{result.InvalidLines.Count} registros inválidos.",
+                        mensaje, // +
+                        // $"{result.InvalidLines.Count} registros inválidos.",
                         "Importación completada",
                         MessageBoxButtons.OK,
                         MessageBoxIcon.Information);
@@ -206,78 +222,78 @@ namespace AdminDispositivosBiometricos
 
         }
 
-        private void ImportaFilasDeArchivo(IEnumerable<string> lines)
-        {
-            this.Cursor = Cursors.WaitCursor;
+        //private void ImportaFilasDeArchivo(IEnumerable<string> lines)
+        //{
+        //    this.Cursor = Cursors.WaitCursor;
 
-            //int counter = 0;
-            char[] delimiterChars = { ' ', ',', '.', '\t' };
-            //                     List<Tuple>(badge, fecha,  hora,   1,   ent_sal, hue_ros, workCode) registros = new List<Tuple>();
-            var lstRegistrosValidos = new List<RegistroBiometrico>();
-            var lstRegistrosNoValidos = new List<Tuple<string, string, string, int, string, string, string>>();
-            try
-            {
-                DateTime fecha;
-                clsLogicaRegistrosUSB.EnceraRegistrosUSB();
-                foreach (string line in lines)
-                {
-                    // procesa la línea line
-                    string[] param = line.Split(delimiterChars, StringSplitOptions.RemoveEmptyEntries);
-                    if (param.Length < 7)
-                    {
-                        lstRegistrosNoValidos.Add(Tuple.Create("", "", "", 0, "", "", ""));
-                        continue;
-                    }
-                    if (DateTime.TryParse(param[1], out fecha))
-                    {
-                        if (fecha > DateTime.Now)
-                        {
-                            lstRegistrosNoValidos.Add(Tuple.Create(param[0], fecha.ToString("yyyy-MM-dd"), param[2], Int32.Parse(param[3]), param[4], param[5], param[6]));
-                            //MessageBox.Show("Hay una inconsistencia en la información del archivo, por favor confirme que sea un archivo válido de marcaciones",
-                            //    "Error en archivo", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                            //return;
-                        }
-                        else
-                        {
-                            lstRegistrosValidos.Add(Tuple.Create(param[0], fecha.ToString("yyyy-MM-dd"), param[2], Int32.Parse(param[3]), param[4], param[5], param[6]));
-                        }
-                    }
-                    else
-                    {
-                        // lstRegistrosValidos.Add(Tuple.Create(param[0], param[1], param[2], Int32.Parse(param[3]), param[4], param[5], param[6]));
-                        MessageBox.Show("Hay una inconsistencia en el formato del archivo, por favor confirme que sea un archivo válido de marcaciones",
-                                "Error en archivo", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        return;
-                    }
+        //    //int counter = 0;
+        //    char[] delimiterChars = { ' ', ',', '.', '\t' };
+        //    //                     List<Tuple>(badge, fecha,  hora,   1,   ent_sal, hue_ros, workCode) registros = new List<Tuple>();
+        //    var lstRegistrosValidos = new List<RegistroBiometrico>();
+        //    var lstRegistrosNoValidos = new List<Tuple<string, string, string, int, string, string, string>>();
+        //    try
+        //    {
+        //        DateTime fecha;
+        //        clsLogicaRegistrosUSB.EnceraRegistrosUSB();
+        //        foreach (string line in lines)
+        //        {
+        //            // procesa la línea line
+        //            string[] param = line.Split(delimiterChars, StringSplitOptions.RemoveEmptyEntries);
+        //            if (param.Length < 7)
+        //            {
+        //                lstRegistrosNoValidos.Add(Tuple.Create("", "", "", 0, "", "", ""));
+        //                continue;
+        //            }
+        //            if (DateTime.TryParse(param[1], out fecha))
+        //            {
+        //                if (fecha > DateTime.Now)
+        //                {
+        //                    lstRegistrosNoValidos.Add(Tuple.Create(param[0], fecha.ToString("yyyy-MM-dd"), param[2], Int32.Parse(param[3]), param[4], param[5], param[6]));
+        //                    //MessageBox.Show("Hay una inconsistencia en la información del archivo, por favor confirme que sea un archivo válido de marcaciones",
+        //                    //    "Error en archivo", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        //                    //return;
+        //                }
+        //                else
+        //                {
+        //                    lstRegistrosValidos.Add(Tuple.Create(param[0], fecha.ToString("yyyy-MM-dd"), param[2], Int32.Parse(param[3]), param[4], param[5], param[6]));
+        //                }
+        //            }
+        //            else
+        //            {
+        //                // lstRegistrosValidos.Add(Tuple.Create(param[0], param[1], param[2], Int32.Parse(param[3]), param[4], param[5], param[6]));
+        //                MessageBox.Show("Hay una inconsistencia en el formato del archivo, por favor confirme que sea un archivo válido de marcaciones",
+        //                        "Error en archivo", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        //                return;
+        //            }
 
-                    //if ((counter + 1) % 100 == 0 && lstRegistrosValidos.Count > 0)
-                    //{
-                    //    clsLogicaRegistrosUSB.GuardaRegistrosUsbEnTemporal(lstRegistrosValidos, "1234567890123");
-                    //    lstRegistrosValidos.Clear();
-                    //}
-                    // counter++;
-                }
-                if (lstRegistrosValidos.Count > 0)
-                    clsLogicaRegistrosUSB.GuardaRegistrosUsbEnTemporal(lstRegistrosValidos, SerialUsb);
-                lstRegistrosValidos.Clear();
-                int num = clsLogicaRegistrosUSB.IngresaNuevasMarcaciones();
-                clsLogicaRegistrosUSB.EnceraRegistrosUSB();
+        //            //if ((counter + 1) % 100 == 0 && lstRegistrosValidos.Count > 0)
+        //            //{
+        //            //    clsLogicaRegistrosUSB.GuardaRegistrosUsbEnTemporal(lstRegistrosValidos, "1234567890123");
+        //            //    lstRegistrosValidos.Clear();
+        //            //}
+        //            // counter++;
+        //        }
+        //        if (lstRegistrosValidos.Count > 0)
+        //            clsLogicaRegistrosUSB.GuardaRegistrosUsbEnTemporal(lstRegistrosValidos, SerialUsb);
+        //        lstRegistrosValidos.Clear();
+        //        int num = clsLogicaRegistrosUSB.IngresaMarcaciones();
+        //        clsLogicaRegistrosUSB.EnceraRegistrosUSB();
 
-                MessageBox.Show(GetMensajeCargaCorrecta(num), "Registros vía USB", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (clsLogicaException errBdd)
-            {
-                MessageBox.Show(errBdd.logErrorDescription, "Error con Base de Datos", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-            catch (Exception err)
-            {
-                MessageBox.Show(err.Message + "\n" + err.InnerException, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-            finally
-            {
-                this.Cursor = Cursors.Default;
-            }
-        }
+        //        MessageBox.Show(GetMensajeCargaCorrecta(num), "Registros vía USB", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        //    }
+        //    catch (clsLogicaException errBdd)
+        //    {
+        //        MessageBox.Show(errBdd.logErrorDescription, "Error con Base de Datos", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        //    }
+        //    catch (Exception err)
+        //    {
+        //        MessageBox.Show(err.Message + "\n" + err.InnerException, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        //    }
+        //    finally
+        //    {
+        //        this.Cursor = Cursors.Default;
+        //    }
+        //}
 
         private static string GetMensajeCargaCorrecta(int num)
         {
