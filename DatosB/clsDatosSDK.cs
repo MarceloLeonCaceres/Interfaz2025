@@ -1,10 +1,10 @@
-﻿using System;
+﻿using ConexionDatos;
+using DatosB.Models;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Text;
 using System.Windows.Forms;
-using ConexionDatos;
-using DatosB.Models;
 using Utilitarios;
 
 namespace DatosB
@@ -43,9 +43,9 @@ namespace DatosB
 
             foreach (DataGridViewRow fila in dgv)
             {
-                sbQueryHuellas.AppendLine("INSERT INTO [tmp_HUELLAS] (Badge, sName, sPassword, iPrivilege, bEnabled, FingerId, Flag, Template, Template1) VALUES('" 
-                    + fila.Cells[0].Value + "', '" + fila.Cells[2].Value + "', '" + fila.Cells[4].Value + "', " + fila.Cells[8].Value 
-                    + ", '" + fila.Cells[1].Value + "', " + fila.Cells[5].Value + ", '" + fila.Cells[6].Value + "', '" + fila.Cells[7].Value + "', '" + fila.Cells[7].Value + "');");               
+                sbQueryHuellas.AppendLine("INSERT INTO [tmp_HUELLAS] (Badge, sName, sPassword, iPrivilege, bEnabled, FingerId, Flag, Template, Template1) VALUES('"
+                    + fila.Cells[0].Value + "', '" + fila.Cells[2].Value + "', '" + fila.Cells[4].Value + "', " + fila.Cells[8].Value
+                    + ", '" + fila.Cells[1].Value + "', " + fila.Cells[5].Value + ", '" + fila.Cells[6].Value + "', '" + fila.Cells[7].Value + "', '" + fila.Cells[7].Value + "');");
             }
             ClsAccesoDatos.EjecutaNoQuery(sbQueryHuellas.ToString());
         }
@@ -65,7 +65,7 @@ namespace DatosB
 
             for (int i = 0; i < datosEmpleados.Rows.Count; i++)
             {
-                string nombre = string.IsNullOrWhiteSpace(datosEmpleados.Rows[i]["name"].ToString()) ? 
+                string nombre = string.IsNullOrWhiteSpace(datosEmpleados.Rows[i]["name"].ToString()) ?
                     datosEmpleados.Rows[i]["pin"].ToString() :
                     datosEmpleados.Rows[i]["name"].ToString();
                 string pwdEnReloj = encripter.Encripta(datosEmpleados.Rows[i]["password"].ToString());
@@ -93,7 +93,7 @@ WHEN NOT MATCHED THEN
         public void FinalizaGrabacionHuellas()
         {
 
-            string consulta;         
+            string consulta;
 
             // Elimina las huellas de la tabla Template, de los usuarios que tienen "nuevas" huellas ( no son necesariamente nuevas, pero son las que se descargaron recién)
             // porque serán reemplazados por las huellas recién descargadas
@@ -165,7 +165,7 @@ WHEN NOT MATCHED THEN
         public void GuardaUsuariosMasivos(DataGridView dgv_usuarios)
         {
             StringBuilder sbQueryBadgeNames = new StringBuilder();
-         
+
             foreach (DataGridViewRow fila in dgv_usuarios.Rows)
                 sbQueryBadgeNames.AppendLine("INSERT INTO [tmp_BADGES] (badgenumber, nombre) VALUES('" + fila.Cells["sEnrollNumber"].Value + "', '" + fila.Cells["sName"].Value + "');");
 
@@ -289,7 +289,7 @@ VALUES('" + fila.Cells["User ID"].Value + "', '" + fila.Cells["Verify Date"].Val
         public DataTable GrabaMarcacionesYUsuariosNuevosEnTablasDefinitivas(string sn)
         {
 
-            string consulta; 
+            string consulta;
             DataTable dt;
 
             consulta = "IF OBJECT_ID(N'T_UsuariosUnicos', N'U') IS NOT NULL \n DROP TABLE T_UsuariosUnicos;";
@@ -331,10 +331,10 @@ VALUES('" + fila.Cells["User ID"].Value + "', '" + fila.Cells["Verify Date"].Val
             FROM tmp_MARCACIONES M INNER JOIN USERINFO U ON M.[User ID] = U.Badgenumber where M.sn = '{sn}' 
             )" +
             @"INSERT INTO CHECKINOUT 
-                    ( USERID,     CHECKTIME,        VERIFYCODE,       CHECKTYPE,        WorkCode,    sn,    SENSORID, Memoinfo)
+                    ( USERID,     CHECKTIME,        VERIFYCODE,       CHECKTYPE,        WorkCode,    sn,    SENSORID, Memoinfo, SENSORCODE )
             SELECT MR.USERID, MR.[Verify Date], MR.[VERIFY TYPE], 
                 case when MR.[VERIFY STATE] > 9 then 'I' else T.checkType end, 
-                MR.WORKCODE, MR.sn, mr.SENSORID, ''
+                MR.WORKCODE, MR.sn, mr.SENSORID, '', 1
             FROM MarcacionesReloj MR left join CheckTypes T on MR.[Verify State] = T.int;";
             ClsAccesoDatos.EjecutaNoQuery(consulta);
 
@@ -348,10 +348,10 @@ VALUES('" + fila.Cells["User ID"].Value + "', '" + fila.Cells["Verify Date"].Val
             ClsAccesoDatos.EjecutaNoQuery(consulta);
 
             return dt;
-               
+
         }
 
-        public void RegistraLogEventoBdd(int orden, string sn, 
+        public void RegistraLogEventoBdd(int orden, string sn,
             int idProceso, string sTarea, string sTareaDetallada)
         {
             try
@@ -361,7 +361,7 @@ VALUES('" + fila.Cells["User ID"].Value + "', '" + fila.Cells["Verify Date"].Val
             ( [orden], [LogTime], [sn], [idProceso], [LogDescr], [LogDetailed])
             VALUES(" + orden + ", GETDATE(), '" + sn + "', " + idProceso + ", '" + sTarea + "', '" + sTareaDetallada + "');");
             }
-            catch(clsDataBaseException dbEx)
+            catch (clsDataBaseException dbEx)
             {
                 throw dbEx;
             }
