@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using DatosB;
+using Domain;
 using Utilitarios;
 
 namespace LogicaB
@@ -23,55 +24,17 @@ namespace LogicaB
             clsDatosRegistrosUSB.InsertaLoteRegsUSB(listado);
         }
 
-        public static void EnceraRegistrosUSB()
+        public static int IngresaMarcaciones(IEnumerable<RegistroBiometrico> lista, string sn)
         {
-            clsDatosRegistrosUSB.EnceraRegistrosUSB();
-        }
-
-        public static void GuardaRegistrosUsbEnTemporal(List<Tuple<string, string, string, int, string, string, string>> lista, string sn)
-        {                        
-            int paso = 900;
-            int sizeLote = paso;
-            int envios = lista.Count / sizeLote;
-            int resto = lista.Count >= sizeLote ? lista.Count % sizeLote : lista.Count;
-            Tuple<string, string, string, int, string, string, string>[] array;
-            List<Tuple<string, string, string, int, string, string, string>> tempList;
+            int numeroMaximoRelojesUSB = 5;
             try
             {
-                for(int i = 0; i <= envios; i++)
-                {
-                    if (i == envios)
-                    {                        
-                        if( resto == 0)
-                        {
-                            break;
-                        }
-                        sizeLote = resto;
-                    }
-                    array = new Tuple<string, string, string, int, string, string, string>[sizeLote];
-                    lista.CopyTo(i * paso, array, 0, sizeLote);
-                    tempList = new List<Tuple<string, string, string, int, string, string, string>>();
-                    tempList = array.ToList();
-                    clsDatosRegistrosUSB.GuardaRegistrosUsbEnTemporal(tempList, sn);
-                }                                
-            }
-            catch (clsDataBaseException errBdd)
-            {
-                throw new clsLogicaException(errBdd.DataErrorDescription);
-            }
-            catch (Exception err)
-            {
-                throw err;
-            }
-        }
+                clsDatosRegistrosUSB.EnceraRegistrosUSB(sn);
 
-        
+                clsDatosRegistrosUSB.GuardaRegistrosUsbEnTemporal(lista, sn);
 
-        public static int IngresaNuevasMarcaciones()
-        {
-            try
-            { 
-                return clsDatosRegistrosUSB.IngresaNuevasMarcaciones();
+                int n = clsDatosRegistrosUSB.IngresaNuevasMarcaciones(numeroMaximoRelojesUSB);
+                return n;
             }
             catch (clsDataBaseException errBdd)
             {
