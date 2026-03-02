@@ -18,15 +18,20 @@ namespace Domain
             if (parts.Length < 7)
                 return false;
 
+            if (parts[0] == "0")
+                return false;
+
             if (!DateTime.TryParse($"{parts[1]} {parts[2]}", out var fechaHora))
                 return false;
+
+            DateTime fechaHoraReducida = fechaHora.Date + new TimeSpan(fechaHora.Hour, fechaHora.Minute, 0);
 
             if (!int.TryParse(parts[3], out var tipo))
                 return false;
 
             record = new RegistroBiometrico(
                 parts[0],
-                fechaHora,
+                fechaHoraReducida,
                 tipo,
                 parts[4],
                 parts[5],
