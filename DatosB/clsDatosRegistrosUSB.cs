@@ -1,7 +1,10 @@
 ﻿using ConexionDatos;
+using Domain;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.SqlClient;
+using System.Diagnostics;
 using System.Text;
 using Utilitarios;
 
@@ -67,70 +70,150 @@ namespace DatosB
             cnn.Close();
         }
 
-        public static void EnceraRegistrosUSB()
+        public static void EnceraRegistrosUSB(string sn)
         {
-            string consulta = "Delete from tmp_Marcaciones where sn ='1234567890123'";
+            string consulta = $"Delete from tmp_Marcaciones where sn = '{sn}'";
             ClsAccesoDatos.EjecutaNoQuery(consulta);
         }
-        public static void GuardaRegistrosUsbEnTemporal(List<Tuple<string, string, string, int, string, string, string>> listaTuplas, string sn)
-        {
-            StringBuilder queryHuellas = new StringBuilder("");
-            string consulta = string.Empty;
+        //public static void GuardaRegistrosUsbEnTemporal(List<Tuple<string, string, string, int, string, string, string>> listaTuplas, string sn)
+        //{
+        //    StringBuilder queryHuellas = new StringBuilder("");
+        //    string consulta = string.Empty;
 
-            queryHuellas.Append("INSERT INTO [tmp_MARCACIONES] \n");
-            queryHuellas.Append("( [User ID], [Verify Date], SENSORID, [Verify State], [Verify Type], workCode, sn ) \n");
-            queryHuellas.Append("VALUES \n");
-            List<string> lstValues = new List<string>();
-            foreach (var registro in listaTuplas)
-            {
-                lstValues.Add("('" + registro.Item1 + "', '" + registro.Item2 + " " + registro.Item3 + "', '0', '" + registro.Item5 + "', '" + registro.Item6 + "', '" + registro.Item7 + "', '" + sn + "')");
-            }
-            queryHuellas.Append(string.Join(",\n", lstValues));
+        //    queryHuellas.Append("INSERT INTO [tmp_MARCACIONES] \n");
+        //    queryHuellas.Append("( [User ID], [Verify Date], SENSORID, [Verify State], [Verify Type], workCode, sn ) \n");
+        //    queryHuellas.Append("VALUES \n");
+        //    List<string> lstValues = new List<string>();
+        //    foreach (var registro in listaTuplas)
+        //    {
+        //        lstValues.Add("('" + registro.Item1 + "', '" + registro.Item2 + " " + registro.Item3 + "', '0', '" + registro.Item5 + "', '" + registro.Item6 + "', '" + registro.Item7 + "', '" + sn + "')");
+        //    }
+        //    queryHuellas.Append(string.Join(",\n", lstValues));
+        //    try
+        //    {
+        //        ClsAccesoDatos.EjecutaNoQuery("set dateformat ymd;\n" + queryHuellas.ToString());
+        //    }
+        //    catch (clsDataBaseException error)
+        //    {
+        //        throw new Utilitarios.clsDataBaseException(error.DataErrorDescription);
+        //    }
+        //    catch (Exception error)
+        //    {
+        //        throw error;
+        //    }
+        //}
+        public static void GuardaRegistrosUsbEnTemporal(IEnumerable<RegistroBiometrico> registros,string sn)
+        {
             try
             {
-                ClsAccesoDatos.EjecutaNoQuery("set dateformat ymd;\n" + queryHuellas.ToString());
+                using (var connection = new SqlConnection(ClsAccesoDatos.strConexion))
+                {
+                    connection.Open();
+
+                    using (var bulkCopy = new SqlBulkCopy(connection))
+                    {
+                        bulkCopy.DestinationTableName = "tmp_MARCACIONES";
+                        bulkCopy.BatchSize = 1000;
+                        bulkCopy.BulkCopyTimeout = 60;
+
+                        var table = CreateMarcacionesDataTable(registros, sn);                        
+                        foreach (DataColumn col in table.Columns)
+                        {
+                            Debug.WriteLine(col.ColumnName);
+                        }
+
+                        bulkCopy.WriteToServer(table);
+                    }
+                }
             }
-            catch (clsDataBaseException error)
+            catch (SqlException ex)
             {
-                throw new Utilitarios.clsDataBaseException(error.DataErrorDescription);
-            }
-            catch (Exception error)
-            {
-                throw error;
+                throw new clsLogicaException(ex.Message);
             }
         }
+        private static DataTable CreateMarcacionesDataTable(IEnumerable<RegistroBiometrico> registros, string sn)
+        {
+            var table = new DataTable();
 
-        public static int IngresaNuevasMarcaciones()
+            table.Columns.Add("User ID", typeof(string));
+            table.Columns.Add("Verify Date", typeof(DateTime));
+            table.Columns.Add("Verify Type", typeof(int));
+            table.Columns.Add("Verify State", typeof(int));
+            table.Columns.Add("WorkCode", typeof(int));
+            table.Columns.Add("sn", typeof(string));
+            table.Columns.Add("SENSORID", typeof(string));
+
+            foreach (var r in registros)
+            {
+                table.Rows.Add(
+                    r.Badge,
+                    r.FechaHora,
+                    r.Tipo,                    
+                    int.Parse(r.EntSal),       
+                    int.Parse(r.WorkCode),     
+                    sn,
+                    "0");                      
+            }
+
+            return table;
+        }
+        public static int IngresaNuevasMarcaciones(int maximoRelojes)
         {
             int n = -1;
             List<string> lstPasos = new List<string>();
             string consulta;
             try
             {
-                // Elimina duplicados en tmp_Marcaciones
-                // Puede haber duplicados por las marcaciones USB, que se carga solo con HH:mm
-                // 1 de 3. Se obtienen los duplicados
-                consulta = @"SELECT DISTINCT [User ID], [Verify Date], [Verify Type], [Verify State], [WorkCode], sn, SENSORID 
-		            INTO #duplicate_table
-                  FROM tmp_Marcaciones
-	              GROUP BY [User ID], [Verify Date], [Verify Type], [Verify State], [WorkCode], sn, SENSORID 
-                  HAVING COUNT(*) > 1";
-                lstPasos.Add(consulta);
+                //  // Elimina duplicados en tmp_Marcaciones
+                //  // Puede haber duplicados por las marcaciones USB, que se carga solo con HH:mm
+                //  // 1 de 3. Se obtienen los duplicados
+                //  consulta = @"SELECT DISTINCT [User ID], [Verify Date], [Verify Type], [Verify State], [WorkCode], sn, SENSORID 
+                //INTO #duplicate_table
+                //    FROM tmp_Marcaciones
+                // GROUP BY [User ID], [Verify Date], [Verify Type], [Verify State], [WorkCode], sn, SENSORID 
+                //    HAVING COUNT(*) > 1";
+                //  lstPasos.Add(consulta);
 
-                // 2 de 3. Se eliminan los 2 duplicados en tmp_Marcaciones
-                consulta = @"DELETE original
-                  FROM tmp_Marcaciones original INNER JOIN #duplicate_table Dup
-	              ON original.[User ID] = Dup.[User ID] AND original.[Verify Date] = Dup.[Verify Date] AND original.[sn] = Dup.[sn]";
-                lstPasos.Add(consulta);
+                //  // 2 de 3. Se eliminan los 2 duplicados en tmp_Marcaciones
+                //  consulta = @"DELETE original
+                //    FROM tmp_Marcaciones original INNER JOIN #duplicate_table Dup
+                // ON original.[User ID] = Dup.[User ID] AND original.[Verify Date] = Dup.[Verify Date] AND original.[sn] = Dup.[sn]";
+                //  lstPasos.Add(consulta);
 
-                // 3 de 3. Se ingresan los registros únicos en tmp_Marcaciones
-                consulta = @"INSERT INTO tmp_Marcaciones([User ID], [Verify Date], [Verify Type], [Verify State], [WorkCode], sn, SENSORID)
-                    SELECT [User ID], [Verify Date], [Verify Type], [Verify State], [WorkCode], sn, SENSORID 
-                    FROM #duplicate_table";
-                lstPasos.Add(consulta);
+                //  // 3 de 3. Se ingresan los registros únicos en tmp_Marcaciones
+                //  consulta = @"INSERT INTO tmp_Marcaciones([User ID], [Verify Date], [Verify Type], [Verify State], [WorkCode], sn, SENSORID)
+                //      SELECT [User ID], [Verify Date], [Verify Type], [Verify State], [WorkCode], sn, SENSORID 
+                //      FROM #duplicate_table";
+                //  lstPasos.Add(consulta);
 
+                // Borra marcaciones ya en CheckInOut
+                consulta = @"delete Tmp
+                from (CHECKINOUT C inner join USERINFO U ON C.USERID = U.USERID)
+                inner join tmp_Marcaciones Tmp On Tmp.[User ID] = U.Badgenumber AND tmp.[Verify Date] = c.CHECKTIME;";
+                ClsAccesoDatos.EjecutaNoQuery(consulta);
 
-                // Ingresa Nuevos ConsultasDapper
+                consulta = @";WITH RangeCTE AS (    
+                    SELECT MIN([Verify Date]) AS Desde, MAX([Verify Date]) AS Hasta    
+                    FROM tmp_Marcaciones
+                )
+                SELECT 
+                COUNT(*) AS TotalCheckins, MAX(SENSORCODE) AS NumeroYaIngresados
+                FROM CHECKINOUT, RangeCTE
+                WHERE CHECKTIME >= RangeCTE.Desde AND CHECKTIME <= RangeCTE.Hasta AND sn = '1234567890123';";
+                var data = ClsAccesoDatos.RetornaDataTable(consulta);
+                if(data.Rows.Count <= 0) 
+                    return -1;
+
+                int enBddEnMismasFechas = (int)data.Rows[0][0];
+                if (enBddEnMismasFechas < 0)
+                    return -1;
+
+                int numeroYaIngresados = enBddEnMismasFechas == 0 ? 0: (short)data.Rows[0][1];
+
+                if (numeroYaIngresados >= maximoRelojes)
+                    return -2;
+
+                // Ingresa Nuevos Usuarios
                 consulta = @"DECLARE @Depto int = 1;
                 SELECT @Depto = DEPTID FROM DEPARTMENTS WHERE SUPDEPTID = 0;
                 WITH Nuevos AS(
@@ -138,12 +221,6 @@ namespace DatosB
                 where [User ID] not in (select badgenumber from USERINFO )
                 )
                 INSERT INTO USERINFO (Badgenumber, [Name], DEFAULTDEPTID) SELECT [User ID], [User ID], @Depto FROM Nuevos";
-                lstPasos.Add(consulta);
-
-                // Borra marcaciones ya en CheckInOut
-                consulta = @"delete Tmp
-                from (CHECKINOUT C inner join USERINFO U ON C.USERID = U.USERID)
-                inner join tmp_Marcaciones Tmp On Tmp.[User ID] = U.Badgenumber AND tmp.[Verify Date] = c.CHECKTIME;";
                 lstPasos.Add(consulta);
 
                 // Crea la tabla Temporal de Equivalencias CheckTypes
@@ -161,9 +238,11 @@ namespace DatosB
                 lstPasos.Add(consulta);
 
                 // Envía marcaciones nuevas a CheckInOut
-                consulta = @"INSERT INTO [dbo].[CHECKINOUT]
-                ([USERID], [CHECKTIME], [CHECKTYPE], [VERIFYCODE], [SENSORID], [WorkCode], [sn], Memoinfo)
-                SELECT U.USERID, Tmp.[Verify Date], CT.[checkType], Tmp.[Verify Type], Tmp.SENSORID, Tmp.WorkCode, Tmp.sn, ''
+                consulta = $@"INSERT INTO [dbo].[CHECKINOUT]
+                ([USERID], [CHECKTIME], [CHECKTYPE], [VERIFYCODE], [SENSORID], 
+                    [WorkCode], [sn], Memoinfo, SENSORCODE)
+                SELECT U.USERID, Tmp.[Verify Date], CT.[checkType], Tmp.[Verify Type], Tmp.SENSORID, 
+                    Tmp.WorkCode, Tmp.sn, '', {(numeroYaIngresados + 1).ToString()}
                 FROM (( tmp_Marcaciones Tmp inner join USERINFO U ON Tmp.[User ID] = U.Badgenumber) 
 			    inner join [#CheckTypes] CT ON Tmp.[Verify State] = CT.[int])";
 
