@@ -200,26 +200,12 @@ namespace AdminDispositivosBiometricos
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(ex.Message + ex.InnerException?.Message?.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             finally
             {
                 Cursor = Cursors.Default;
             }
-
-            //switch (respuesta) {
-            //    case DialogResult.OK:
-            //        IEnumerable<string> lines = System.IO.File.ReadLines(openFileDialog1.FileName);
-            //        ImportaFilasDeArchivo(lines);
-            //        break;
-            //    case DialogResult.Cancel:
-            //        break;
-            //    default:
-            //        MessageBox.Show("El formato del archivo seleccionado no corresponde a un archivo de marcaciones de reloj biométrico", 
-            //            "Archivo inválido", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-            //        break;
-            //}
-
         }
 
         //private void ImportaFilasDeArchivo(IEnumerable<string> lines)
