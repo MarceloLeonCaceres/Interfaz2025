@@ -57,7 +57,7 @@ namespace AdminDispositivosBiometricos
             }
 
             string pcSecurity = ConfigurationManager.AppSettings["pcSecurity"];
-            if (pcSecurity.ToLower() != "insecure")
+            if (true) // (pcSecurity.ToLower() != "insecure")
             {
                 bool es_Compu_Valida;
                 try
