@@ -145,14 +145,20 @@ namespace DatosB
 
             foreach (var r in registros)
             {
+                if (!int.TryParse(r.EntSal, out int entSal))
+                    throw new FormatException($"El valor de EntSal '{r.EntSal}' no es un número válido para Ent/Sal {r.EntSal}.");
+
+                if (!int.TryParse(r.WorkCode, out int workCode))
+                    throw new FormatException($"El valor de WorkCode '{r.WorkCode}' no es un número válido para TrabajoCodigo {r.WorkCode}.");
+
                 table.Rows.Add(
                     r.Badge,
                     r.FechaHora,
-                    r.Tipo,                    
-                    int.Parse(r.EntSal),       
-                    int.Parse(r.WorkCode),     
+                    r.Tipo,
+                    entSal,
+                    workCode,
                     sn,
-                    "0");                      
+                    "0");
             }
 
             return table;
@@ -164,28 +170,6 @@ namespace DatosB
             string consulta;
             try
             {
-                //  // Elimina duplicados en tmp_Marcaciones
-                //  // Puede haber duplicados por las marcaciones USB, que se carga solo con HH:mm
-                //  // 1 de 3. Se obtienen los duplicados
-                //  consulta = @"SELECT DISTINCT [User ID], [Verify Date], [Verify Type], [Verify State], [WorkCode], sn, SENSORID 
-                //INTO #duplicate_table
-                //    FROM tmp_Marcaciones
-                // GROUP BY [User ID], [Verify Date], [Verify Type], [Verify State], [WorkCode], sn, SENSORID 
-                //    HAVING COUNT(*) > 1";
-                //  lstPasos.Add(consulta);
-
-                //  // 2 de 3. Se eliminan los 2 duplicados en tmp_Marcaciones
-                //  consulta = @"DELETE original
-                //    FROM tmp_Marcaciones original INNER JOIN #duplicate_table Dup
-                // ON original.[User ID] = Dup.[User ID] AND original.[Verify Date] = Dup.[Verify Date] AND original.[sn] = Dup.[sn]";
-                //  lstPasos.Add(consulta);
-
-                //  // 3 de 3. Se ingresan los registros únicos en tmp_Marcaciones
-                //  consulta = @"INSERT INTO tmp_Marcaciones([User ID], [Verify Date], [Verify Type], [Verify State], [WorkCode], sn, SENSORID)
-                //      SELECT [User ID], [Verify Date], [Verify Type], [Verify State], [WorkCode], sn, SENSORID 
-                //      FROM #duplicate_table";
-                //  lstPasos.Add(consulta);
-
                 // Borra marcaciones ya en CheckInOut
                 consulta = @"delete Tmp
                 from (CHECKINOUT C inner join USERINFO U ON C.USERID = U.USERID)
@@ -208,7 +192,12 @@ namespace DatosB
                 if (enBddEnMismasFechas < 0)
                     return -1;
 
-                int numeroYaIngresados = enBddEnMismasFechas == 0 ? 0: (short)data.Rows[0][1];
+                int numeroYaIngresados = 0;
+
+                if (enBddEnMismasFechas > 0 && data.Rows[0][1] is int yaIngresados)
+                {
+                    numeroYaIngresados = yaIngresados;
+                }
 
                 if (numeroYaIngresados >= maximoRelojes)
                     return -2;
@@ -247,18 +236,20 @@ namespace DatosB
 			    inner join [#CheckTypes] CT ON Tmp.[Verify State] = CT.[int])";
 
                 n = ClsAccesoDatos.IntEjecutaEscalar(consulta, lstPasos);
-
+                return n;
             }
             catch (clsDataBaseException error)
             {
-                throw new Utilitarios.clsDataBaseException(error.DataErrorDescription);
+
+                throw;
+                //throw new Utilitarios.clsDataBaseException(error.DataErrorDescription +
+                //    "\r\n" +
+                //    error.InnerException?.Message?.ToString());
             }
             catch (Exception error)
             {
-                throw error;
+                throw;
             }
-
-            return n;
         }
 
     }

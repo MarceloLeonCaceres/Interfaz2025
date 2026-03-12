@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("BioDevices Cia. Ltda.")]
 [assembly: AssemblyProduct("DatosB")]
-[assembly: AssemblyCopyright("Copyright © HP Inc. 2025")]
+[assembly: AssemblyCopyright("Copyright © BioDevices Inc. 2026")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -32,5 +32,5 @@ using System.Runtime.InteropServices;
 // Puede especificar todos los valores o usar los valores predeterminados de número de compilación y de revisión
 // utilizando el carácter "*", como se muestra a continuación:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("2.26.2.27")]
-[assembly: AssemblyFileVersion("2.26.2.27")]
+[assembly: AssemblyVersion("2.26.3.6")]
+[assembly: AssemblyFileVersion("2.26.3.6")]
