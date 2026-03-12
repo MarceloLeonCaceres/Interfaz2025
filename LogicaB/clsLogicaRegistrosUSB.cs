@@ -38,11 +38,13 @@ namespace LogicaB
             }
             catch (clsDataBaseException errBdd)
             {
-                throw new clsLogicaException(errBdd.DataErrorDescription);
+                //throw new clsLogicaException(errBdd.InnerException?.Message?.ToString() + "\r\n" +
+                //    errBdd.DataErrorDescription?.ToString());
+                throw;
             }
             catch (Exception err)
             {
-                throw err;
+                throw;
             }
         }
         public static int CheckType_a_int(string c)
