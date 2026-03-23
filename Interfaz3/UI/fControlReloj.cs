@@ -1,17 +1,15 @@
-﻿using System;
+﻿using AdminDispositivosBiometricos.Auxiliares;
+using AdminDispositivosBiometricos.Helper;
+using LogicaB;
+using SDK;
+using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Utilitarios;
-using SDK;
-using LogicaB;
-using System.Threading;
-using System.Diagnostics;
-using System.Linq;
-using AdminDispositivosBiometricos.Helper;
-using static SDK.SDKHelper;
-using AdminDispositivosBiometricos.Auxiliares;
 
 namespace AdminDispositivosBiometricos
 {
@@ -33,7 +31,7 @@ namespace AdminDispositivosBiometricos
 
         Task tarea;
         CancellationTokenSource _cancellation = new CancellationTokenSource();
-        CancellationToken token;         
+        CancellationToken token;
 
         public fControlReloj()
         {
@@ -75,10 +73,10 @@ namespace AdminDispositivosBiometricos
                 _avance = 0;
 
         }
-        
-        
+
+
         private delegate void ActivaToolStrip(bool _bool, ToolStrip strip);
-        private void ActivaBotonInvoke(bool si_no, ToolStrip toolStrip  )
+        private void ActivaBotonInvoke(bool si_no, ToolStrip toolStrip)
         {
             if (toolStrip.InvokeRequired)
             {
@@ -116,7 +114,7 @@ namespace AdminDispositivosBiometricos
         private delegate void DelegadoDataGridView(DataTable data, DataGridView dataGrid);
         private void ActualizaNewDgvMarcacionesInvoke(DataTable dt, DataGridView dgv)
         {
-            if(dgv.InvokeRequired)
+            if (dgv.InvokeRequired)
             {
                 var delegado = new DelegadoDataGridView(ActualizaNewDgvMarcaciones);
                 dgv.Invoke(delegado, dt, dgv);
@@ -187,14 +185,14 @@ namespace AdminDispositivosBiometricos
                 this.btnGetSystemInfo.Enabled = true;
                 this.btnGetDataInfo.Enabled = true;
 
-                if(getDeviceInfo(reloj).Item1 == false)
+                if (getDeviceInfo(reloj).Item1 == false)
                 {
                     string mensaje = "No es un equipo compatible con el sistema. \n";
                     mensaje += "'" + datosReloj.sNombreReloj + "', de serial No.: " + getDeviceInfo(reloj).Item2.ToString() + ".";
                     MessageBox.Show(mensaje, "Equipo no registrado.", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     this.Close();
                 }
-                
+
                 getCapacityInfo(reloj);
 
                 aplicaConexionBotones(true);
@@ -208,14 +206,14 @@ namespace AdminDispositivosBiometricos
                 aplicaConexionBotones(false);
                 this.Close();
             }
-            else 
+            else
             {
                 string mensaje = "No se pudo establecer la comunicación con el dispositivo \n";
                 mensaje += "'" + datosReloj.sNombreReloj + "', de dirección IP: " + datosReloj.sIP.ToString() + ".";
                 MessageBox.Show(mensaje, "Error de comunicación", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                
+
             }
-            
+
             dgvBitacora.Refresh();
             Cursor = Cursors.Default;
         }
@@ -307,8 +305,8 @@ namespace AdminDispositivosBiometricos
             List<string> lstEmpleados = new List<string>();
             foreach (DataGridViewRow fila in dgv.Rows)
             {
-                if(fila.Cells["Chk"].Value != null) 
-                    if((bool)fila.Cells["Chk"].Value)
+                if (fila.Cells["Chk"].Value != null)
+                    if ((bool)fila.Cells["Chk"].Value)
                         lstEmpleados.Add(fila.Cells["Badgenumber"].Value.ToString());
             }
             return lstEmpleados;
@@ -336,9 +334,9 @@ namespace AdminDispositivosBiometricos
             Cursor = Cursors.WaitCursor;
             dgvLeeUsuarios.Rows.Clear();
             ClsInforma.ReportaBitacora("Inicia lectura de huellas del dispositivo", dgvBitacora, sEquipoActual);
-            
+
             DataTable dtEmpleados = PrepareColumnas.UsuariosBiometrico();
-            reloj.sta_GetAllUserFPInfo(dgvBitacora, PrgSTA, dgvLeeUsuarios, dtEmpleados, 0, 
+            reloj.sta_GetAllUserFPInfo(dgvBitacora, PrgSTA, dgvLeeUsuarios, dtEmpleados, 0,
                 lstEmpleadosChequedosDescarga);
 
             if (dgvLeeUsuarios.RowCount == 0)
@@ -347,7 +345,7 @@ namespace AdminDispositivosBiometricos
                 Cursor = Cursors.Default;
                 return;
             }
-            
+
             try
             {
                 ClsInforma.ReportaBitacora("Inicia grabación de huellas en base de datos", dgvBitacora, sEquipoActual);
@@ -387,7 +385,7 @@ namespace AdminDispositivosBiometricos
         private void GuardaHuellasPorLoteEnTablasTemporales(clsLogicaSDK oLogHuellas)
         {
             List<DataGridViewRow> dgvTemporal = new List<DataGridViewRow>();
-            
+
             for (int i = 0; i < dgvLeeUsuarios.Rows.Count; i++)
             {
                 dgvTemporal.Add(dgvLeeUsuarios.Rows[i]);
@@ -438,7 +436,7 @@ namespace AdminDispositivosBiometricos
         {
             if (dgvUserFP.RowCount == 0)
             {
-                MessageBox.Show("No hay huellas para enviar al dispositivo.", "Atención", 
+                MessageBox.Show("No hay huellas para enviar al dispositivo.", "Atención",
                     MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;
             }
@@ -446,7 +444,7 @@ namespace AdminDispositivosBiometricos
             int numeroHuellasAEnviar = dgvUserFP.SelectedRows.Count;
             if (numeroHuellasAEnviar == 0)
             {
-                MessageBox.Show("Debe seleccionar las huellas para enviar al dispositivo.", "Atención", 
+                MessageBox.Show("Debe seleccionar las huellas para enviar al dispositivo.", "Atención",
                     MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;
             }
@@ -467,13 +465,13 @@ namespace AdminDispositivosBiometricos
 
             if (cbBatchUpload.Checked)
             {
-                EnviaDgvHuellasASdkMetodoElegido(dgvTemporal, ref respuestaBiometrico, numeroHuellasAEnviar, 
+                EnviaDgvHuellasASdkMetodoElegido(dgvTemporal, ref respuestaBiometrico, numeroHuellasAEnviar,
                     tamanioEnvioLote: 100,
                     formaEnvio: EnvioBatch);
             }
             else
             {
-                EnviaDgvHuellasASdkMetodoElegido(dgvTemporal, ref respuestaBiometrico, numeroHuellasAEnviar, 
+                EnviaDgvHuellasASdkMetodoElegido(dgvTemporal, ref respuestaBiometrico, numeroHuellasAEnviar,
                     tamanioEnvioLote: 10,
                     formaEnvio: EnvioUnoXUno);
             }
@@ -490,7 +488,7 @@ namespace AdminDispositivosBiometricos
 
 
         private void EnviaDgvHuellasASdkMetodoElegido(
-            List<DataGridViewRow> dgvTemporal, 
+            List<DataGridViewRow> dgvTemporal,
             ref int respuesta, int numHuellasAEnviar, int tamanioEnvioLote,
             Func<ProgressBar, List<DataGridViewRow>, int> formaEnvio)
         {
@@ -534,10 +532,10 @@ namespace AdminDispositivosBiometricos
 
         private void tsbDescargar_Click(object sender, EventArgs e)
         {
-            
+
             tsbDescargar.Enabled = false;
             Cursor = Cursors.WaitCursor;
-            
+
             DescargarMarcaciones();
             tsbDescargar.Enabled = true;
             Cursor = Cursors.Default;
@@ -569,10 +567,10 @@ namespace AdminDispositivosBiometricos
                 }
             }
             catch (FechaNoValidaException ex)
-            {                
+            {
                 MessageBox.Show(ex.DatosLeidos, "Al leer datos del biométrico", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-            catch(clsDataBaseException exBdd)
+            catch (clsDataBaseException exBdd)
             {
                 MessageBox.Show(exBdd.DataErrorDescription, "Al descargar marcaciones", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
@@ -603,16 +601,16 @@ namespace AdminDispositivosBiometricos
             return dt_Marcaciones;
         }
 
-        public void GuardarMarcacionesConUsuariosNuevos(DataGridView gv_Attlog, DataGridView dgvUserinfo, string sn)
+        public async void GuardarMarcacionesConUsuariosNuevos(DataGridView gv_Attlog, DataGridView dgvUserinfo, string sn)
         {
             try
             {
-               
+
                 ClsInforma.ReportaBitacoraInvoke("Enviando marcaciones a Base de Datos", dgvBitacora, sEquipoActual);
                 PrgSTA.Visible = true;
                 ActualizaProgressBarInvoke(0, PrgSTA);
 
-                LogicaReloj.GuardaMarcacionesPorLoteEnTablasTemporales(gv_Attlog, sn, PrgSTA);
+                await LogicaReloj.GuardaMarcacionesPorLoteEnTablasTemporales(gv_Attlog, sn, PrgSTA);
 
                 LogicaReloj.GuardaUsuariosNuevosPorLoteEnTablasTemporales(dgvUserinfo, PrgSTA);
 
@@ -640,7 +638,9 @@ namespace AdminDispositivosBiometricos
         }
 
 
-        private void GuardarMarcaciones(DataGridView gv_Attlog, DataGridView dgvUserinfo, string sn, IProgress<int>progress, CancellationToken cancelToken)
+        private void GuardarMarcaciones(
+            DataGridView gv_Attlog, DataGridView dgvUserinfo, string sn, 
+            IProgress<int> progress, CancellationToken cancelToken)
         {
             if (gv_Attlog.RowCount == 0)
             {
@@ -657,13 +657,13 @@ namespace AdminDispositivosBiometricos
 
                 ClsInforma.ReportaBitacoraInvoke("Enviando marcaciones a Base de Datos", dgvBitacora, sEquipoActual);
 
-                LogicaReloj.GuardaMarcacionesTemporalesDepuradasPorLotes(gv_Attlog, sn, progress);
+                LogicaReloj.GuardaMarcacionesTemporalesDepuradasPorLotes(gv_Attlog, sn, PrgSTA);
 
                 ClsInforma.ReportaBitacoraInvoke("Revisando usuarios nuevos...", dgvBitacora, sEquipoActual);
 
                 // Usuarios
                 progress?.Report(0);
-                
+
                 LogicaReloj.GuardaUsuariosPorLotes(dgvUserinfo, progress);
                 progress?.Report(50);
 
@@ -686,19 +686,6 @@ namespace AdminDispositivosBiometricos
             }
         }
 
-
-
-
-        //private void btnReporteDescargas_Click(object sender, EventArgs e)
-        //{
-        //    DataTable dtReporteDescargas = new DataTable();
-        //    BindingSource bs = new BindingSource();
-        //    clsLogicaSDK oLogs = new clsLogicaSDK();
-        //    dtReporteDescargas = oLogs.DtReporteDescargas(dtpDesde.Value, dtpHasta.Value);
-        //    bs.DataSource = dtReporteDescargas;
-        //    dgvDetalleDescargasMasivas.DataSource = bs;
-        //    Utilitarios.ClsDataGridView.PoneFiltros(dgvDetalleDescargasMasivas);
-        //}
         #endregion
 
         #region Borrar Datos
@@ -712,7 +699,6 @@ namespace AdminDispositivosBiometricos
                 ClsInforma.NotificaRespuestaBddBitacora(dgvBitacora, sn, sEquipoActual, resultado, "Se borraron los administradores");
                 Cursor = Cursors.Default;
             }
-
         }
 
         private void btn_clearAllLogs_Click(object sender, EventArgs e)
@@ -725,7 +711,6 @@ namespace AdminDispositivosBiometricos
                 ClsInforma.NotificaRespuestaBddBitacora(dgvBitacora, sn, sEquipoActual, resultado, "Se borraron todos los registros");
                 Cursor = Cursors.Default;
             }
-
         }
 
         private void btn_clearAllFp_Click(object sender, EventArgs e)
@@ -738,7 +723,6 @@ namespace AdminDispositivosBiometricos
                 ClsInforma.NotificaRespuestaBddBitacora(dgvBitacora, sn, sEquipoActual, resultado, "Se borraron todas las huellas");
                 Cursor = Cursors.Default;
             }
-
         }
 
         private void btn_clearAllUser_Click(object sender, EventArgs e)
@@ -751,7 +735,6 @@ namespace AdminDispositivosBiometricos
                 ClsInforma.NotificaRespuestaBddBitacora(dgvBitacora, sn, sEquipoActual, resultado, "Se borraron todos los usuarios");
                 Cursor = Cursors.Default;
             }
-
         }
 
         private void btn_clearAllData_Click(object sender, EventArgs e)
@@ -777,7 +760,6 @@ namespace AdminDispositivosBiometricos
                 ClsInforma.NotificaRespuestaBddBitacora(dgvBitacora, sn, sEquipoActual, respuesta, "Se borraron los registros de asistencia");
                 Cursor = Cursors.Default;
             }
-
         }
         #endregion
 
@@ -857,20 +839,19 @@ namespace AdminDispositivosBiometricos
         private void PreparaDtUsuariosReloj()
         {
             dtUsuariosReloj.Rows.Clear();
-            if(dtUsuariosReloj.Columns.Count == 0)
+            if (dtUsuariosReloj.Columns.Count == 0)
             {
                 dtUsuariosReloj.Columns.Add("Badgenumber", typeof(string));
                 dtUsuariosReloj.Columns.Add("Name", typeof(string));
                 dtUsuariosReloj.Columns.Add("privilege", typeof(string));
                 // dtUsuariosReloj.PrimaryKey = new DataColumn[] { dtUsuariosReloj.Columns["Badgenumber"] };
             }
-            
+
             tsTxtBusqueda.Text = "";
         }
 
         private void ActualizaLecturaUsuarios()
         {
-
             DataTable DtUsersRelojYBase = new DataTable();
             var tablaUsersRelojYBase = from r in dtUsuariosReloj.AsEnumerable()
                                        join bdd in dtUsuariosBdd.AsEnumerable()
@@ -931,7 +912,7 @@ namespace AdminDispositivosBiometricos
                 dgvChekCol.TrueValue = true;
                 dgv.Columns.Add(dgvChekCol);
             }
-            
+
             dgv.Columns["Chk"].DisplayIndex = 1;
             dgv.Columns["Badgenumber"].DisplayIndex = 2;
             dgv.Columns["Name"].DisplayIndex = 3;
@@ -954,12 +935,10 @@ namespace AdminDispositivosBiometricos
 
         private void btnGetDataInfo_Click(object sender, EventArgs e)
         {
-
         }
 
         private void btnGetSystemInfo_Click(object sender, EventArgs e)
         {
-
         }
 
         private CancellationTokenSource cts;
@@ -968,7 +947,10 @@ namespace AdminDispositivosBiometricos
             #region CancellationToken, progress, etc
             cts = new CancellationTokenSource();
             var cancelToken = cts.Token;
-            var progress = new Progress<int>(v => PrgSTA.Value = v);
+            var progreso = new Progress<int>(valor =>
+            {
+                PrgSTA.Value = Math.Min(valor, PrgSTA.Maximum);
+            });
             #endregion
 
             tsbDescargaAsync.Enabled = false;
@@ -983,7 +965,8 @@ namespace AdminDispositivosBiometricos
                 clsIntString retorno = new clsIntString();
                 await Task.Run(() =>
                 {
-                    retorno = reloj.bio_LeeMarcaciones_ProgressBar(PrgSTA, dt_Marcaciones, dgvUserinfo, progress, cancelToken, countAttLog);
+                    retorno = reloj.bio_LeeMarcaciones_ProgressBar(
+                        PrgSTA, dt_Marcaciones, dgvUserinfo, progreso, cancelToken, countAttLog);
                 }, cts.Token);
 
                 if (retorno.respuesta != 1 || dt_Marcaciones.Rows.Count == 0)
@@ -993,7 +976,7 @@ namespace AdminDispositivosBiometricos
                 else
                 {
                     ClsInforma.NotificaRespuestaBddBitacora(dgvBitacora, retorno.sn, sEquipoActual, retorno.respuesta, "Las marcaciones del reloj han sido leidas: " + dt_Marcaciones.Rows.Count.ToString());
-                    GuardarMarcaciones(gv_Attlog, dgvUserinfo, retorno.sn, progress, cancelToken);
+                    GuardarMarcaciones(gv_Attlog, dgvUserinfo, retorno.sn, progreso, cancelToken);
                 }
             }
             catch (Exception)
@@ -1003,12 +986,6 @@ namespace AdminDispositivosBiometricos
 
             PrgSTA.Visible = false;
 
-            //var progress = new Progress<int>(porcentaje =>
-            //{
-            //    PrgSTA.Value = porcentaje;
-            //});
-            // await Task.Run(() => DescargarMarcaciones(progress, out respuestaBiometrico, out sn));
-            
             tsbDescargar.Enabled = true;
             Cursor = Cursors.Default;
         }
@@ -1020,10 +997,8 @@ namespace AdminDispositivosBiometricos
                 cts?.Cancel();
         }
 
-
         private void tsbDescargarUsuarios_Click(object sender, EventArgs e)
         {
-
             // Tarea Paralelo
             token = _cancellation.Token;
             tarea = Task.Run(() =>
@@ -1043,7 +1018,6 @@ namespace AdminDispositivosBiometricos
             Cursor = Cursors.Default;
 
             _cancellation.Cancel();
-
         }
 
         private void chkUsuariosEnBaseDatos_CheckedChanged(object sender, EventArgs e)
@@ -1066,7 +1040,7 @@ namespace AdminDispositivosBiometricos
         bool controladorCheck = true;
         private void checaDataGridView(DataGridView dgv, bool si_no)
         {
-            if(controladorCheck)
+            if (controladorCheck)
             {
                 foreach (DataGridViewRow fila in dgv.Rows)
                 {
@@ -1106,7 +1080,7 @@ namespace AdminDispositivosBiometricos
             PrgSTA.Visible = true;
 
             reloj.sta_GetAllUserFaceInfo(dgvBitacora, PrgSTA, dgvFaceInfo, 0, lstEmpleadosChequedosDescarga);
-            
+
             if (dgvFaceInfo.RowCount == 0)
             {
                 MessageBox.Show("No hay rostros para guardar.", "Atención", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
@@ -1127,7 +1101,7 @@ namespace AdminDispositivosBiometricos
                 int j = 0;
                 oLogRostros.IniciaGrabacionRostros();
                 ClsInforma.ReportaBitacora("Inicia grabación de rostros en base de datos", dgvBitacora, sEquipoActual);
-                
+
                 ActualizaProgressBarInvoke(j, PrgSTA);
 
                 List<DataGridViewRow> dgvTemporal = new List<DataGridViewRow>();
@@ -1139,7 +1113,7 @@ namespace AdminDispositivosBiometricos
                         oLogRostros.guardaRostros(dgvTemporal);
                         dgvTemporal.Clear();
                         j++;
-                        ActualizaProgressBarInvoke((int)(j * (10000.0 / (dgvFaceInfo.Rows.Count+1))), PrgSTA);
+                        ActualizaProgressBarInvoke((int)(j * (10000.0 / (dgvFaceInfo.Rows.Count + 1))), PrgSTA);
                         // PrgSTA.Value = (int)contadorLotesEnviados * (10000 / dgvFaceInfo.Rows.Count);
                         // PrgSTA.Refresh();
                     }
@@ -1280,8 +1254,8 @@ namespace AdminDispositivosBiometricos
         }
 
         private void btnEliminarUsuarios_Click(object sender, EventArgs e)
-        {            
-            if(!confirmaEliminación("Al eliminar un usuario de un reloj biométrico, la persona no podrá registrarse en el dispositivo"))
+        {
+            if (!confirmaEliminación("Al eliminar un usuario de un reloj biométrico, la persona no podrá registrarse en el dispositivo"))
             {
                 return;
             }
@@ -1321,12 +1295,11 @@ namespace AdminDispositivosBiometricos
                 ActualizaLecturaUsuarios();
                 this.Cursor = Cursors.Default;
             }
-                
         }
 
         private void tabControl_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if(tabControl.SelectedTab == tpEnviarHuellas || tabControl.SelectedTab == tpEnviarRostros || tabControl.SelectedTab == tpLeerUsuarios)
+            if (tabControl.SelectedTab == tpEnviarHuellas || tabControl.SelectedTab == tpEnviarRostros || tabControl.SelectedTab == tpLeerUsuarios)
             {
                 tsbBuscar.Visible = true;
                 tsTxtBusqueda.Visible = true;
@@ -1352,9 +1325,7 @@ namespace AdminDispositivosBiometricos
                 case "tpEnviarRostros":
                     RecuperaRostros();
                     break;
-
             }
-            
             this.Cursor = Cursors.Default;
         }
 
@@ -1370,12 +1341,10 @@ namespace AdminDispositivosBiometricos
 
         private void dgvUserFP_DataError(object sender, DataGridViewDataErrorEventArgs e)
         {
-
         }
 
         private void btnTraerUsuariosDeBdd_Click(object sender, EventArgs e)
         {
-
             this.Cursor = Cursors.WaitCursor;
             GetTodosEmpleadosParaEnviarAReloj();
             this.Cursor = Cursors.Default;
@@ -1397,7 +1366,7 @@ namespace AdminDispositivosBiometricos
             bs.DataSource = dt;
             dgvNombresUsuarios.DataSource = bs;
         }
-        
+
         private void btnEnviarNombresUsuarios_Click(object sender, EventArgs e)
         {
             if (dgvNombresUsuarios.RowCount == 0)
@@ -1415,8 +1384,8 @@ namespace AdminDispositivosBiometricos
             Cursor = Cursors.WaitCursor;
             PrgSTA.Visible = true;
             PrgSTA.Value = 0;
-            PrgSTA.Refresh();         
-            
+            PrgSTA.Refresh();
+
             ClsInforma.ReportaBitacora("Inicio envío de usuarios a dispositivo", dgvBitacora, sEquipoActual);
             dgvBitacora.Refresh();
             try
@@ -1489,7 +1458,6 @@ namespace AdminDispositivosBiometricos
 
         private void btnEnviaTarjetasAReloj_Click(object sender, EventArgs e)
         {
-
         }
     }
 }

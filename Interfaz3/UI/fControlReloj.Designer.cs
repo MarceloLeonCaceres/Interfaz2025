@@ -153,6 +153,14 @@
             this.btnEnviarRostrosABiometrico = new System.Windows.Forms.Button();
             this.tpEnviarNombres = new System.Windows.Forms.TabPage();
             this.dgvNombresUsuarios = new System.Windows.Forms.DataGridView();
+            this.NumCA = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.NombreUsuario = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.cardNumber = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.TarjetaProximidad = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.mverifyPass = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Contrasenia = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.privilege = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.emPrivilege = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.btnEnviarNombresUsuarios = new System.Windows.Forms.Button();
             this.btnTraerUsuariosDeBdd = new System.Windows.Forms.Button();
             this.tpAvanzado = new System.Windows.Forms.TabPage();
@@ -179,14 +187,6 @@
             this.Equipo = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Hora = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
-            this.NumCA = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.NombreUsuario = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.cardNumber = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.TarjetaProximidad = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.mverifyPass = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Contrasenia = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.privilege = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.emPrivilege = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.toolStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -1517,6 +1517,76 @@
             this.dgvNombresUsuarios.Size = new System.Drawing.Size(880, 295);
             this.dgvNombresUsuarios.TabIndex = 2;
             // 
+            // NumCA
+            // 
+            this.NumCA.DataPropertyName = "NumCA";
+            this.NumCA.HeaderText = "NumCA";
+            this.NumCA.Name = "NumCA";
+            this.NumCA.ReadOnly = true;
+            this.NumCA.ToolTipText = "Número de Control de Asistencia (Código del empleado) en el reloj biométrico";
+            // 
+            // NombreUsuario
+            // 
+            this.NombreUsuario.DataPropertyName = "NombreUsuario";
+            this.NombreUsuario.HeaderText = "Nombre Usuario";
+            this.NombreUsuario.Name = "NombreUsuario";
+            this.NombreUsuario.ReadOnly = true;
+            this.NombreUsuario.Width = 200;
+            // 
+            // cardNumber
+            // 
+            this.cardNumber.DataPropertyName = "cardNo";
+            this.cardNumber.HeaderText = "cardNo";
+            this.cardNumber.Name = "cardNumber";
+            this.cardNumber.ReadOnly = true;
+            this.cardNumber.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.cardNumber.Visible = false;
+            this.cardNumber.Width = 5;
+            // 
+            // TarjetaProximidad
+            // 
+            this.TarjetaProximidad.DataPropertyName = "TarjetaProximidad";
+            this.TarjetaProximidad.HeaderText = "TarjetaProximidad";
+            this.TarjetaProximidad.Name = "TarjetaProximidad";
+            this.TarjetaProximidad.ReadOnly = true;
+            // 
+            // mverifyPass
+            // 
+            this.mverifyPass.DataPropertyName = "mverifyPass";
+            this.mverifyPass.HeaderText = "mverifyPass";
+            this.mverifyPass.Name = "mverifyPass";
+            this.mverifyPass.ReadOnly = true;
+            this.mverifyPass.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.mverifyPass.Visible = false;
+            this.mverifyPass.Width = 5;
+            // 
+            // Contrasenia
+            // 
+            this.Contrasenia.DataPropertyName = "Contrasenia";
+            this.Contrasenia.HeaderText = "Contraseña";
+            this.Contrasenia.Name = "Contrasenia";
+            this.Contrasenia.ReadOnly = true;
+            // 
+            // privilege
+            // 
+            this.privilege.DataPropertyName = "privilege";
+            this.privilege.HeaderText = "privilege";
+            this.privilege.Name = "privilege";
+            this.privilege.ReadOnly = true;
+            this.privilege.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.privilege.Visible = false;
+            this.privilege.Width = 5;
+            // 
+            // emPrivilege
+            // 
+            this.emPrivilege.DataPropertyName = "emPrivilege";
+            this.emPrivilege.HeaderText = "emPrivilege";
+            this.emPrivilege.Name = "emPrivilege";
+            this.emPrivilege.ReadOnly = true;
+            this.emPrivilege.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.emPrivilege.Visible = false;
+            this.emPrivilege.Width = 5;
+            // 
             // btnEnviarNombresUsuarios
             // 
             this.btnEnviarNombresUsuarios.Image = global::AdminDispositivosBiometricos.Properties.Resources.info_16x16;
@@ -1791,76 +1861,6 @@
             // 
             this.timer1.Interval = 500;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
-            // 
-            // NumCA
-            // 
-            this.NumCA.DataPropertyName = "NumCA";
-            this.NumCA.HeaderText = "NumCA";
-            this.NumCA.Name = "NumCA";
-            this.NumCA.ReadOnly = true;
-            this.NumCA.ToolTipText = "Número de Control de Asistencia (Código del empleado) en el reloj biométrico";
-            // 
-            // NombreUsuario
-            // 
-            this.NombreUsuario.DataPropertyName = "NombreUsuario";
-            this.NombreUsuario.HeaderText = "Nombre Usuario";
-            this.NombreUsuario.Name = "NombreUsuario";
-            this.NombreUsuario.ReadOnly = true;
-            this.NombreUsuario.Width = 200;
-            // 
-            // cardNumber
-            // 
-            this.cardNumber.DataPropertyName = "cardNo";
-            this.cardNumber.HeaderText = "cardNo";
-            this.cardNumber.Name = "cardNumber";
-            this.cardNumber.ReadOnly = true;
-            this.cardNumber.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.cardNumber.Visible = false;
-            this.cardNumber.Width = 5;
-            // 
-            // TarjetaProximidad
-            // 
-            this.TarjetaProximidad.DataPropertyName = "TarjetaProximidad";
-            this.TarjetaProximidad.HeaderText = "TarjetaProximidad";
-            this.TarjetaProximidad.Name = "TarjetaProximidad";
-            this.TarjetaProximidad.ReadOnly = true;
-            // 
-            // mverifyPass
-            // 
-            this.mverifyPass.DataPropertyName = "mverifyPass";
-            this.mverifyPass.HeaderText = "mverifyPass";
-            this.mverifyPass.Name = "mverifyPass";
-            this.mverifyPass.ReadOnly = true;
-            this.mverifyPass.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.mverifyPass.Visible = false;
-            this.mverifyPass.Width = 5;
-            // 
-            // Contrasenia
-            // 
-            this.Contrasenia.DataPropertyName = "Contrasenia";
-            this.Contrasenia.HeaderText = "Contraseña";
-            this.Contrasenia.Name = "Contrasenia";
-            this.Contrasenia.ReadOnly = true;
-            // 
-            // privilege
-            // 
-            this.privilege.DataPropertyName = "privilege";
-            this.privilege.HeaderText = "privilege";
-            this.privilege.Name = "privilege";
-            this.privilege.ReadOnly = true;
-            this.privilege.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.privilege.Visible = false;
-            this.privilege.Width = 5;
-            // 
-            // emPrivilege
-            // 
-            this.emPrivilege.DataPropertyName = "emPrivilege";
-            this.emPrivilege.HeaderText = "emPrivilege";
-            this.emPrivilege.Name = "emPrivilege";
-            this.emPrivilege.ReadOnly = true;
-            this.emPrivilege.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.emPrivilege.Visible = false;
-            this.emPrivilege.Width = 5;
             // 
             // fControlReloj
             // 

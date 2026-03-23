@@ -94,6 +94,7 @@
             this.tsbUSB.Text = "Descargar Registros USB";
             this.tsbUSB.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.tsbUSB.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+            this.tsbUSB.Visible = false;
             this.tsbUSB.Click += new System.EventHandler(this.tsbUSB_Click);
             // 
             // tsbUsuarios
@@ -176,7 +177,7 @@
             this.toolStripStatusLabel1.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.toolStripStatusLabel1.RightToLeftAutoMirrorImage = true;
             this.toolStripStatusLabel1.Size = new System.Drawing.Size(59, 17);
-            this.toolStripStatusLabel1.Text = "V3.26.2.26";
+            this.toolStripStatusLabel1.Text = "V3.26.3.20";
             this.toolStripStatusLabel1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // fPrincipal
