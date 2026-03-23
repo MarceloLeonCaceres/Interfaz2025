@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using DatosB;
+﻿using DatosB;
 using Domain;
+using System;
+using System.Collections.Generic;
 using Utilitarios;
 
 namespace LogicaB
@@ -14,19 +11,19 @@ namespace LogicaB
     {
         public static string retornaUserId(string badgenumber)
         {
-            
+
             return clsDatosRegistrosUSB.retornaUserId(badgenumber);
         }
 
         public static void InsertaLoteRegsUSB(string listado)
         {
-            
+
             clsDatosRegistrosUSB.InsertaLoteRegsUSB(listado);
         }
 
         public static int IngresaMarcaciones(IEnumerable<RegistroBiometrico> lista, string sn)
         {
-            int numeroMaximoRelojesUSB = 5;
+            int numeroMaximoRelojesUSB = 1;
             try
             {
                 clsDatosRegistrosUSB.EnceraRegistrosUSB(sn);
@@ -49,7 +46,7 @@ namespace LogicaB
         }
         public static int CheckType_a_int(string c)
         {
-            switch(c)
+            switch (c)
             {
                 case "I": return 0;
                 case "O": return 1;
