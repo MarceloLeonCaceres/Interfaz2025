@@ -1,11 +1,10 @@
-﻿using System;
+﻿using DatosB;
+using Domain;
+using System;
 using System.Collections.Generic;
 using System.Data;
-
-using ConexionDatos;
-using DatosB;
-using Utilitarios;
 using System.Windows.Forms;
+using Utilitarios;
 
 namespace LogicaB
 {
@@ -125,12 +124,13 @@ namespace LogicaB
             }
         }
 
-        public void GuardaSoloMarcacionesTemporalesDepuradas(List<DataGridViewRow> dgv, string sn)
+        public void GuardaSoloMarcacionesTemporalesDepuradas(
+            List<MarcacionCheckInOut> checkInOuts, string sn, IProgress<int> progreso)
         {
             try
             {
                 clsDatosSDK oDatos = new clsDatosSDK();
-                oDatos.GuardaSoloMarcacionesTemporales(dgv, sn);
+                oDatos.GuardaSoloMarcacionesTemporales(checkInOuts, sn, progreso);
                 oDatos.DepuraMarcacionesMasivas(sn);
             }
             catch (clsDataBaseException errBdd)
@@ -148,23 +148,6 @@ namespace LogicaB
             clsDatosSDK oDatos = new clsDatosSDK();
             oDatos.InicializaTablasDescargaTemporales();
         }
-        //public void GuardaSoloMarcacionesTemporalesDepuradas(DataGridView dgv, string sn, int inicio, int fin)
-        //{
-        //    try
-        //    {
-        //        clsDatosSDK oDatos = new clsDatosSDK();
-        //        oDatos.GuardaSoloMarcacionesTemporales(dgv, sn, inicio, fin);
-        //        oDatos.DepuraMarcacionesMasivas(sn);
-        //    }
-        //    catch (clsDataBaseException errBdd)
-        //    {
-        //        throw new clsLogicaException(errBdd.DataErrorDescription);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        throw new clsLogicaException(ex.Message);
-        //    }
-        //}
 
         public void guardaMarcacionesBulk(DataTable dt, string sn)
         {
@@ -245,7 +228,7 @@ namespace LogicaB
                 clsDatosSDK oDatos = new clsDatosSDK();
                 oDatos.RegistraLogEventoBdd(orden, sn, idProceso, sTarea, sTareaDetallada);
             }
-            catch(clsDataBaseException dbEx)
+            catch (clsDataBaseException dbEx)
             {
                 throw dbEx;
             }
@@ -254,12 +237,6 @@ namespace LogicaB
                 throw ex;
             }
         }
-
-        //public void CargaMasivaSqlBulkCopy(DataTable dt, string nombreTabla)
-        //{
-        //    clsDatosSDK oConex = new clsDatosSDK();
-        //    oConex.CargaMasivaSqlBulkCopy(dt, nombreTabla);
-        //}
 
         public int iniciaProcesoMasivo(int idAministrador)
         {
@@ -328,7 +305,3 @@ namespace LogicaB
 
     }
 }
-
-
-
-
