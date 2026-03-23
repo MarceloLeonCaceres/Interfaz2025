@@ -1,35 +1,46 @@
-﻿using System;
+﻿using Domain;
+using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace LogicaB
 {
     public static class LogicaReloj
     {
-        public static void GuardaMarcacionesPorLoteEnTablasTemporales(DataGridView gv_Attlog, string sn, ProgressBar PrgSTA)
+        public static async Task GuardaMarcacionesPorLoteEnTablasTemporales(
+            DataGridView gv_Attlog, string sn, ProgressBar PrgSTA)
         {
-            int sizeLoteEnvio = 500;
-            List<DataGridViewRow> dgvTemporal = new List<DataGridViewRow>();
+            // ✅ Se extrae la data del grid en el hilo UI ANTES de ir al background
+            List<MarcacionCheckInOut> marcaciones = ExtraeMarcacionesDeGrid(gv_Attlog, sn);
+            var progreso = new Progress<int>(valor => PrgSTA.Value = valor);
 
             clsLogicaSDK oLogMarcaciones = new clsLogicaSDK();
             clsLogicaSDK.IniciaGrabacionMarcaciones(sn);
 
-            for (int i = 0; i < gv_Attlog.Rows.Count; i++)
+            await Task.Run(() =>
             {
-                dgvTemporal.Add(gv_Attlog.Rows[i]);
-                if ((i + 1) % sizeLoteEnvio == 0 && dgvTemporal.Count > 0)
-                {
-                    oLogMarcaciones.GuardaSoloMarcacionesTemporalesDepuradas(dgvTemporal, sn);
-                    dgvTemporal.Clear();
-                    ActualizaProgressBarInvoke((int)(i * (100.0 / gv_Attlog.Rows.Count)), PrgSTA);
-                }
-            }
-            if (dgvTemporal.Count > 0)
-            {
-                oLogMarcaciones.GuardaSoloMarcacionesTemporalesDepuradas(dgvTemporal, sn);
-            }
+                var oLogica = new clsLogicaSDK();
+                oLogica.GuardaSoloMarcacionesTemporalesDepuradas(marcaciones, sn, progreso);
+            });
         }
-
+        private static List<MarcacionCheckInOut> ExtraeMarcacionesDeGrid(DataGridView gv, string sn)
+        {
+            var lista = new List<MarcacionCheckInOut>(gv.Rows.Count); // capacidad inicial = sin realocaciones
+            foreach (DataGridViewRow fila in gv.Rows)
+            {
+                lista.Add(new MarcacionCheckInOut
+                {
+                    UserId = fila.Cells["User ID"].Value?.ToString(),
+                    VerifyDate = Convert.ToDateTime(fila.Cells["Verify Date"].Value),
+                    VerifyType = fila.Cells["Verify Type"].Value?.ToString(),
+                    VerifyState = Convert.ToInt32(fila.Cells["Verify State"].Value),
+                    WorkCode = Convert.ToInt32(fila.Cells["WorkCode"].Value),
+                    Sn = sn
+                });
+            }
+            return lista;
+        }
         public static void GuardaUsuariosNuevosPorLoteEnTablasTemporales(DataGridView dgvUserinfo, ProgressBar PrgSTA)
         {
             int sizeLoteEnvio = 100;
@@ -70,40 +81,23 @@ namespace LogicaB
 
         private delegate void DelegadoProgressBar(int iAvance, ProgressBar progressBar);
 
-
         private static void ActualizaProgressBar(int j, ProgressBar progressBar)
         {
             progressBar.Value = j;
             progressBar.Refresh();
         }
 
-        public static void GuardaMarcacionesTemporalesDepuradasPorLotes(DataGridView gv_Attlog, string sn, IProgress<int> progress)
+        public static async void GuardaMarcacionesTemporalesDepuradasPorLotes(
+            DataGridView gv_Attlog, string sn, ProgressBar PrgSTA)
         {
-            int nRegistros = gv_Attlog.RowCount;            
-            PoneLoteSize(nRegistros, out int paquete, out int iAvance);
+            List<MarcacionCheckInOut> marcaciones = ExtraeMarcacionesDeGrid(gv_Attlog, sn);
+            var progreso = new Progress<int>(valor => PrgSTA.Value = valor);
             
-
-            int j = 0;
-
-            List<DataGridViewRow> dgvTemporal = new List<DataGridViewRow>();
-            var oLogHuellas = new clsLogicaSDK();
-            for (int i = 0; i < nRegistros; i++)
+            await Task.Run(() =>
             {
-                dgvTemporal.Add(gv_Attlog.Rows[i]);
-                if ((i + 1) % paquete == 0 && dgvTemporal.Count > 0)
-                {
-                    oLogHuellas.GuardaSoloMarcacionesTemporalesDepuradas(dgvTemporal, sn);
-                    dgvTemporal.Clear();
-                    j++;
-                    if ((j * iAvance) > 100)
-                        progress?.Report(100);
-                    progress?.Report(j * iAvance);
-                }
-            }
-            if (dgvTemporal.Count > 0)
-            {
-                oLogHuellas.GuardaSoloMarcacionesTemporalesDepuradas(dgvTemporal, sn);
-            }
+                var oLogHuellas = new clsLogicaSDK();
+                oLogHuellas.GuardaSoloMarcacionesTemporalesDepuradas(marcaciones, sn, progreso);
+            });            
         }
 
         public static void GuardaUsuariosPorLotes(DataGridView dgvUserinfo, IProgress<int> progress)
