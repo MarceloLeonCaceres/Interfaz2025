@@ -1,8 +1,10 @@
 ﻿using ConexionDatos;
 using DatosB.Models;
+using Domain;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.SqlClient;
 using System.Text;
 using System.Windows.Forms;
 using Utilitarios;
@@ -182,37 +184,135 @@ TRUNCATE TABLE tmp_BADGES;");
             ClsAccesoDatos.EjecutaNoQuery($"DELETE FROM tmp_MARCACIONES  WHERE sn = '{sn}' or sn is null or [User ID] = 0 or [User ID] = '0';" + "\n" + "DELETE FROM tmp_BADGES WHERE idDepto is null;");
         }
 
-        public void GuardaSoloMarcacionesTemporales(List<DataGridViewRow> dgv_logs, string sn)
+        public void GuardaSoloMarcacionesTemporales(
+            List<MarcacionCheckInOut> marcaciones, string sn, IProgress<int> progreso)
         {
-            StringBuilder sbQueryMarcaciones = new StringBuilder();
-            foreach (DataGridViewRow fila in dgv_logs)
-                sbQueryMarcaciones.AppendLine(@"INSERT INTO [tmp_MARCACIONES] 
-([User ID], [Verify Date], [Verify Type], [Verify State], workCode, sn) 
-VALUES('" + fila.Cells["User ID"].Value + "', '" + fila.Cells["Verify Date"].Value + "', '" + fila.Cells["Verify Type"].Value + "', "
-+ fila.Cells["Verify State"].Value + ", " + fila.Cells["WorkCode"].Value + $", '{sn}');");
+            DataTable dt = ConvierteADataTable(marcaciones);
 
-            ClsAccesoDatos.EjecutaNoQuery(sbQueryMarcaciones.ToString());
+            using (var conn = new SqlConnection(ClsAccesoDatos.strConexion))
+            {
+                conn.Open();
 
-            string consulta = $"UPDATE tmp_MARCACIONES SET SENSORID = (SELECT Top 1 MachineNumber FROM Machines WHERE sn = '{sn}') ;";
-            ClsAccesoDatos.EjecutaNoQuery(consulta);
+                int lote = marcaciones.Count / 10;
+                
+                using (var bulk = new SqlBulkCopy(conn))
+                {
+                    bulk.DestinationTableName = "[dbo].[tmp_Marcaciones]";
+                    bulk.BatchSize = lote;    // lotes internos del BulkCopy
+                    bulk.BulkCopyTimeout = 300;
 
+                    // Mapeo explícito DataTable → columnas de la tabla
+                    bulk.ColumnMappings.Add("UserId", "User ID");
+                    bulk.ColumnMappings.Add("VerifyDate", "Verify Date");
+                    bulk.ColumnMappings.Add("VerifyType", "Verify Type");
+                    bulk.ColumnMappings.Add("VerifyState", "Verify State");
+                    bulk.ColumnMappings.Add("WorkCode", "WorkCode");
+                    bulk.ColumnMappings.Add("Sn", "sn");
+
+                    // ✅ NotifyAfter dispara el evento cada 500 filas → actualiza ProgressBar
+                    bulk.NotifyAfter = 500;
+                    bulk.SqlRowsCopied += (s, e) =>
+                    {
+                        int pct = (int)(e.RowsCopied * 100.0 / marcaciones.Count);
+                        progreso?.Report(Math.Min(pct, 100));
+                    };
+
+                    foreach (DataColumn col in dt.Columns)
+                    {
+                        Console.WriteLine($"'{col.ColumnName}'");
+                    }
+
+                    bulk.WriteToServer(dt);
+                    progreso?.Report(100);
+                }
+
+                // ✅ FIX: UPDATE filtrado por sn — antes actualizaba TODA la tabla
+                // ✅ Parametrizado — antes era vulnerable a SQL Injection
+                const string sqlUpdate = @"
+            UPDATE tmp_MARCACIONES 
+            SET SENSORID = (SELECT TOP 1 MachineNumber FROM Machines WHERE sn = @sn)
+            WHERE sn = @sn";
+
+                using (var cmd = new SqlCommand(sqlUpdate, conn))
+                {
+                    cmd.Parameters.Add("@sn", SqlDbType.VarChar).Value = sn;
+                    cmd.ExecuteNonQuery();
+                }
+            }
         }
 
-        //public void GuardaSoloMarcacionesTemporales(DataGridView dgv, string sn, int inicio, int fin)
-        //{
-        //    StringBuilder sbQueryMarcaciones = new StringBuilder();
-        //    for(int i = inicio; i <= fin; i++)
-        //    {
-        //        sbQueryMarcaciones.AppendLine($@"INSERT INTO [tmp_MARCACIONES] ([User ID], [Verify Date], [Verify Type], [Verify State], workCode) 
-        //    VALUES('" + dgv.Rows[i].Cells["User ID"].Value + "', '" + dgv.Rows[i].Cells["Verify Date"].Value + "', '" + dgv.Rows[i].Cells["Verify Type"].Value 
-        //    + "', " + dgv.Rows[i].Cells["Verify State"].Value + ", " + dgv.Rows[i].Cells["WorkCode"].Value + ");");
-        //    }
-        //    ClsAccesoDatos.EjecutaNoQuery(sbQueryMarcaciones.ToString());
+        public void DepuraMarcacionesMasivas(string sn)
+        {
+            using (var conn = new SqlConnection(ClsAccesoDatos.strConexion))
+            {
+                conn.Open();
 
-        //    string consulta = "UPDATE tmp_MARCACIONES SET sn = '" + sn + "', SENSORID = (SELECT MachineNumber FROM Machines WHERE sn = '" + sn + "') WHERE sn is null;";
-        //    ClsAccesoDatos.EjecutaNoQuery(consulta);
+                // ✅ Paso 1: Eliminar User ID = 0 (parametrizado)
+                const string sqlDeleteCero = @"
+            DELETE FROM tmp_Marcaciones 
+            WHERE [User ID] = '0' OR [User ID] = 0";
+                using (var cmd = new SqlCommand(sqlDeleteCero, conn))
+                    cmd.ExecuteNonQuery();
 
-        //}
+                // ✅ Paso 2: Obtener rango de fechas (parametrizado)
+                DateTime desde, hasta;
+                const string sqlRango = @"
+            SELECT 
+                DATEADD(MINUTE, -1, MIN([Verify Date])),
+                DATEADD(MINUTE,  1, MAX([Verify Date]))
+            FROM tmp_MARCACIONES";
+
+                using (var cmd = new SqlCommand(sqlRango, conn))
+                using (var reader = cmd.ExecuteReader())
+                {
+                    if (!reader.Read() || reader.IsDBNull(0))
+                        return; // tabla vacía, nada que depurar
+
+                    desde = reader.GetDateTime(0);
+                    hasta = reader.GetDateTime(1);
+                }
+
+                // ✅ Paso 3: Eliminar duplicados — completamente parametrizado
+                const string sqlDeleteDuplicados = @"
+            WITH MarcacionesViejas AS (
+                SELECT U.BADGENUMBER, C.CHECKTIME
+                FROM USERINFO U 
+                INNER JOIN CHECKINOUT C ON U.USERID = C.USERID
+                WHERE C.CHECKTIME BETWEEN @desde AND @hasta
+            )
+            DELETE tmp_MARCACIONES
+            FROM tmp_MARCACIONES
+            INNER JOIN MarcacionesViejas 
+                ON tmp_MARCACIONES.[User ID]    = MarcacionesViejas.BADGENUMBER
+               AND tmp_MARCACIONES.[Verify Date] = MarcacionesViejas.CHECKTIME";
+
+                using (var cmd = new SqlCommand(sqlDeleteDuplicados, conn))
+                {
+                    cmd.CommandTimeout = 300;
+                    cmd.Parameters.Add("@desde", SqlDbType.DateTime).Value = desde;
+                    cmd.Parameters.Add("@hasta", SqlDbType.DateTime).Value = hasta;
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
+
+        // ✅ Helper: convierte List<Marcacion> a DataTable para SqlBulkCopy
+        private static DataTable ConvierteADataTable(List<MarcacionCheckInOut> marcaciones)
+        {
+            var dt = new DataTable();
+            dt.Columns.Add("UserId", typeof(string));
+            dt.Columns.Add("VerifyDate", typeof(DateTime));
+            dt.Columns.Add("VerifyType", typeof(int));
+            dt.Columns.Add("VerifyState", typeof(int));
+            dt.Columns.Add("WorkCode", typeof(int));
+            dt.Columns.Add("Sn", typeof(string));
+
+            foreach (var m in marcaciones)
+                dt.Rows.Add(m.UserId, m.VerifyDate, m.VerifyType, m.VerifyState, m.WorkCode, m.Sn);
+
+            return dt;
+        }
+
         public void GuardaMarcaciones(List<MarcacionRelojModel> dgv_logs, string sn)
         {
             StringBuilder sbInsertMarcaciones = new StringBuilder();
@@ -225,37 +325,6 @@ VALUES('" + fila.Cells["User ID"].Value + "', '" + fila.Cells["Verify Date"].Val
 
             string setSnSensorid = "UPDATE tmp_MARCACIONES SET sn = '" + sn + "', SENSORID = (SELECT MachineNumber FROM Machines WHERE sn = '" + sn + "') WHERE sn is null;";
             ClsAccesoDatos.EjecutaNoQuery(setSnSensorid);
-
-        }
-
-        public void DepuraMarcacionesMasivas(string serialNumber)
-        {
-            string consulta;
-            DataTable dt = new DataTable();
-            string sDesde;
-            string sHasta;
-
-            // Elimina las marcaciones con badgenumber = 0
-            consulta = @"DELETE FROM tmp_Marcaciones
-                WHERE [User ID] = '0' or [User ID] = 0";
-            ClsAccesoDatos.EjecutaNoQuery(consulta, 30);
-
-            consulta = @"select dateadd(MINUTE, -1, min([Verify Date])) as Desde, dateadd(MINUTE, 1, max([Verify Date])) as Hasta 
-            from tmp_MARCACIONES;";
-
-            dt = ClsAccesoDatos.RetornaDataTable(consulta);
-            sDesde = dt.Rows[0][0].ToString();
-            sHasta = dt.Rows[0][1].ToString();
-
-            // Elimina las marcaciones 'viejas' que ya estaban en la base de datos
-            consulta = @"WITH MarcacionesViejas AS (
-                SELECT U.BADGENUMBER, c.CHECKTIME
-                FROM USERINFO U INNER JOIN CHECKINOUT C ON U.USERID = C.USERID 
-                WHERE CHECKTIME BETWEEN '" + sDesde + "' AND '" + sHasta + @"')
-            DELETE tmp_MARCACIONES
-            FROM tmp_MARCACIONES inner join MarcacionesViejas 
-        	ON tmp_MARCACIONES.[User ID] = MarcacionesViejas.badgenumber and tmp_MARCACIONES.[Verify Date] = MarcacionesViejas.Checktime;";
-            ClsAccesoDatos.EjecutaNoQuery(consulta, 300);
 
         }
 
