@@ -42,6 +42,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ImportResult.cs" />
+    <Compile Include="MarcacionCheckInOut.cs" />
     <Compile Include="MarcacionParser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RegistroBiometrico.cs" />
