@@ -136,11 +136,14 @@
   <data name="Interrogacion_16x16" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Interrogacion_16x16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="Stop_32x32" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Stop_32x32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="RecuperaEmpleado_32x32" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\RecuperaEmpleado_32x32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="Descarga_32x32" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Descarga_32x32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="CandadoAbierto_16x16" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\CandadoAbierto_16x16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="FaceVerde_16x16" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\FaceVerde_16x16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -154,6 +157,9 @@
   <data name="Correo_32x32" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Correo_32x32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="TraerDeBdd_16x16" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\TraerDeBdd_16x16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="HuellaVerde_16x16" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\HuellaVerde_16x16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -166,9 +172,6 @@
   <data name="FaceAmarilla_16x16" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\FaceAmarilla_16x16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="Tarjeta_16x16" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Tarjeta_16x16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="Configuracion_32x32" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Configuracion_32x32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -178,14 +181,14 @@
   <data name="Editar_32x321" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Editar_32x321.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="TarjetaAmarilla_16x16" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\TarjetaAmarilla_16x16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="Add_32x32" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Add_32x32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Play_32x32" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Play_32x32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="EliminarUsuario_32x32" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\EliminarUsuario_32x32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Borrar_16x16" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Borrar_16x16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -199,14 +202,14 @@
   <data name="BusquedaUsuario_32x32" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\BusquedaUsuario_32x32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="CandadoAbierto_16x16" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\CandadoAbierto_16x16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="Tarjeta_16x16" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Tarjeta_16x16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Carga_16x16" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Carga_16x16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="TraerDeBdd_16x16" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\TraerDeBdd_16x16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="EliminarUsuario_32x32" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\EliminarUsuario_32x32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="BuscarVerde_32x32" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\BuscarVerde_32x32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -223,8 +226,8 @@
   <data name="info_16x16" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\info_16x16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="Stop_32x32" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Stop_32x32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="Descarga_32x32" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Descarga_32x32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="HuellaAmarilla_16x16" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\HuellaAmarilla_16x16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -241,7 +244,7 @@
   <data name="PersonalIdAzulRojo_32x32" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\PersonalIdAzulRojo_32x32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="TarjetaAmarilla_16x16" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\TarjetaAmarilla_16x16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="HuellaAmarillaRelojRojo_128x128" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\HuellaAmarillaRelojRojo_128x128.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

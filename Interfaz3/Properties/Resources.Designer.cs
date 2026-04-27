@@ -313,6 +313,16 @@ namespace AdminDispositivosBiometricos.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap HuellaAmarillaRelojRojo_128x128 {
+            get {
+                object obj = ResourceManager.GetObject("HuellaAmarillaRelojRojo_128x128", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap HuellaVerde_16x16 {
             get {
                 object obj = ResourceManager.GetObject("HuellaVerde_16x16", resourceCulture);
