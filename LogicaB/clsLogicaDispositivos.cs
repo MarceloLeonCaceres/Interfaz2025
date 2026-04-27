@@ -7,16 +7,15 @@ using System.Net;
 
 namespace LogicaB
 {
-
-    public class clsLogicaDispositivos
+    public class ClsLogicaDispositivos
     {
-        public DataTable dtRelojesValidos()
+        public DataTable DtRelojesValidos()
         {
-            DatosB.clsDatosDispositivos oDatos = new DatosB.clsDatosDispositivos();
+            var oDatos = new ClsDatosDispositivos();
             List<string> LstSnValidos = new List<string>();
             LstSnValidos = ListaDesencriptadaDispositivos();
             if (LstSnValidos.Count > 0)
-                return oDatos.dtRelojesValidos(LstSnValidos);
+                return oDatos.DtRelojesValidos(LstSnValidos);
             else
             {
                 return null;
@@ -25,7 +24,7 @@ namespace LogicaB
 
         public List<string> ListaDesencriptadaDispositivos()
         {
-            clsDatosDispositivos oDatos = new clsDatosDispositivos();
+            ClsDatosDispositivos oDatos = new ClsDatosDispositivos();
             ClsEncriptacion aux = new ClsEncriptacion();
             DataTable dtRelojesRegistrados = new DataTable();
             List<string> listaDispositivos = new List<string>();
@@ -52,28 +51,28 @@ namespace LogicaB
         }
         public DataTable dtDispositivos()
         {
-            DatosB.clsDatosDispositivos oDatos = new DatosB.clsDatosDispositivos();
+            DatosB.ClsDatosDispositivos oDatos = new DatosB.ClsDatosDispositivos();
             return oDatos.dtDispositivos();
         }
 
         public void InsertaDispositivos(string strSerial, int intUso)
         {
             ClsEncriptacion util = new ClsEncriptacion();
-            DatosB.clsDatosDispositivos oDatos = new DatosB.clsDatosDispositivos();
+            DatosB.ClsDatosDispositivos oDatos = new DatosB.ClsDatosDispositivos();
             oDatos.InsertaDispositivos(util.EncriptarBIO(strSerial), intUso);
         }
 
         public void EliminaDispositivos(string strSerial)
         {
             ClsEncriptacion util = new ClsEncriptacion();
-            DatosB.clsDatosDispositivos oDatos = new DatosB.clsDatosDispositivos();
+            DatosB.ClsDatosDispositivos oDatos = new DatosB.ClsDatosDispositivos();
             oDatos.EliminaDispositivos(util.EncriptarBIO(strSerial));
         }
 
         public void updateDispositivos(int intId, string strSerial, int intUso)
         {
             ClsEncriptacion util = new ClsEncriptacion();
-            DatosB.clsDatosDispositivos oDatos = new DatosB.clsDatosDispositivos();
+            DatosB.ClsDatosDispositivos oDatos = new DatosB.ClsDatosDispositivos();
             oDatos.updateDispositivos(intId, util.EncriptarBIO(strSerial), intUso);
         }
 
@@ -81,7 +80,7 @@ namespace LogicaB
         {
             try
             {
-                clsDatosDispositivos oDatos = new clsDatosDispositivos();
+                ClsDatosDispositivos oDatos = new ClsDatosDispositivos();
                 return oDatos.dtRelojes();
             }
             catch(clsDataBaseException errBdd)
@@ -118,19 +117,19 @@ namespace LogicaB
 
         public void InsertarReloj(string sNombre, int iNumeroDispositivo, string sIP, int iPuerto, string sSN)
         {
-            clsDatosDispositivos oDatos = new clsDatosDispositivos();
+            ClsDatosDispositivos oDatos = new ClsDatosDispositivos();
             oDatos.InsertarReloj(sNombre, iNumeroDispositivo, sIP, iPuerto, sSN);
         }
 
         public void ActualizarReloj(int id, string sNombre, int iNumeroDispositivo, IPAddress sIP, int iPuerto, string sSN)
         {
-            clsDatosDispositivos oDatos = new clsDatosDispositivos();
+            ClsDatosDispositivos oDatos = new ClsDatosDispositivos();
             oDatos.ActualizarReloj(id, sNombre, iNumeroDispositivo, sIP, iPuerto, sSN);
         }
 
         public void EliminarReloj(int id)
         {
-            clsDatosDispositivos oDatos = new clsDatosDispositivos();
+            ClsDatosDispositivos oDatos = new ClsDatosDispositivos();
             oDatos.EliminarReloj(id);
         }
 

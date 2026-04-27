@@ -50,9 +50,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="clsLogicaAdminCorreos.cs" />
+    <Compile Include="ClsLogicaAdministradores.cs" />
     <Compile Include="clsLogicaBioBan.cs" />
     <Compile Include="clsLogicaDepartamentos.cs" />
-    <Compile Include="clsLogicaDispositivos.cs" />
+    <Compile Include="ClsLogicaDispositivos.cs" />
     <Compile Include="clsLogicaEmpleados.cs" />
     <Compile Include="clsLogicaLogsDescargas.cs" />
     <Compile Include="clsLogicaRegistrosUSB.cs" />
