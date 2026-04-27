@@ -41,6 +41,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Administradores\AdminUser.cs" />
+    <Compile Include="Administradores\Globales.cs" />
     <Compile Include="ImportResult.cs" />
     <Compile Include="MarcacionCheckInOut.cs" />
     <Compile Include="MarcacionParser.cs" />
