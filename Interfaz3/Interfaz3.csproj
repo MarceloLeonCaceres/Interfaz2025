@@ -136,6 +136,12 @@
     <Compile Include="UI\fEmpleado.Designer.cs">
       <DependentUpon>fEmpleado.cs</DependentUpon>
     </Compile>
+    <Compile Include="UI\FLogin.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\FLogin.Designer.cs">
+      <DependentUpon>FLogin.cs</DependentUpon>
+    </Compile>
     <Compile Include="UI\fLogsDescargas.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -173,6 +179,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UI\fEmpleado.resx">
       <DependentUpon>fEmpleado.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\FLogin.resx">
+      <DependentUpon>FLogin.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\fLogsDescargas.resx">
       <DependentUpon>fLogsDescargas.cs</DependentUpon>
@@ -256,6 +265,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="AdminBiometricos.ico" />
+    <None Include="Resources\HuellaAmarillaRelojRojo_128x128.png" />
     <Content Include="Resources\HuellaAmarillaRelojRojo_64x64.ico" />
     <Content Include="Resources\info_16x16.png" />
     <None Include="Resources\TarjetaAmarilla_16x16.png" />
