@@ -56,7 +56,7 @@ namespace DatosB
             consulta = "INSERT INTO Departments (deptname, supdeptid) " + "VALUES ('" + nomDepto + "','" + codPadre + "')";
             ClsAccesoDatos.EjecutaNoQuery(consulta);
 
-            ClsAccesoDatos.EjecutaNoQuery("INSERT INTO SystemLog VALUES('" + codAdminLog + "', GETDATE(), 'ProperTime', 0, 'Creación Departamentos', '" + nomDepto + "');");
+            ClsAccesoDatos.EjecutaNoQuery("INSERT INTO SystemLog VALUES('" + codAdminLog + "', GETDATE(), 'AdminRelojesBio', 0, 'Creación Departamentos', '" + nomDepto + "');");
         }
 
         public int cuentaDeptosHijos(int codDepto)
@@ -75,7 +75,7 @@ namespace DatosB
             // clsConexionBdd objConexion = new clsConexionBdd();
 
             consulta = ClsAccesoDatos.EjecutaEscalar("select DeptName from departments where deptid = '" + codDepto + "'").ToString();
-            ClsAccesoDatos.EjecutaNoQuery("INSERT INTO SystemLog VALUES('" + codAdminLog + "', GETDATE(), 'ProperTime', 0, 'Elimina Departamentos', '" + consulta + "');");
+            ClsAccesoDatos.EjecutaNoQuery("INSERT INTO SystemLog VALUES('" + codAdminLog + "', GETDATE(), 'AdminRelojesBio', 0, 'Elimina Departamentos', '" + consulta + "');");
 
             consulta = "UPDATE userinfo set defaultdeptid=(select min(deptid) from DEPARTMENTS) " + "\n" + "where defaultdeptid='" + codDepto + "'";
             consulta = consulta + "\n";
@@ -91,7 +91,7 @@ namespace DatosB
             consulta = "UPDATE Departments set DeptName='" + nomDepto + "' where deptId='" + codDepto + "'";
             ClsAccesoDatos.EjecutaNoQuery(consulta);
 
-            ClsAccesoDatos.EjecutaNoQuery("INSERT INTO SystemLog VALUES('" + codAdminLog + "', GETDATE(), 'ProperTime', 0, 'Cambia nombre Departamentos', '" + nomDepto + "');");
+            ClsAccesoDatos.EjecutaNoQuery("INSERT INTO SystemLog VALUES('" + codAdminLog + "', GETDATE(), 'AdminRelojesBio', 0, 'Cambia nombre Departamentos', '" + nomDepto + "');");
         }
 
         public void TransfiereDepartamento(int codDepto, List<int> listaEmps, string codAdminLog = "-1")
@@ -116,7 +116,7 @@ namespace DatosB
             foreach (DataRow fila in dt.Rows)
                 consulta = consulta + ", " + fila[0].ToString();
 
-            ClsAccesoDatos.EjecutaNoQuery("INSERT INTO SystemLog VALUES('" + codAdminLog + "', GETDATE(), 'ProperTime', 0, 'Transfiere Empleados a Departamentos', '" + consulta + "');");
+            ClsAccesoDatos.EjecutaNoQuery("INSERT INTO SystemLog VALUES('" + codAdminLog + "', GETDATE(), 'AdminRelojesBio', 0, 'Transfiere Empleados a Departamentos', '" + consulta + "');");
         }
 
         public DataTable RetornaLogo()

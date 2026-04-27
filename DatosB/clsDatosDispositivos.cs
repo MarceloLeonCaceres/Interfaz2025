@@ -6,7 +6,7 @@ using Utilitarios;
 
 namespace DatosB
 {
-    public class clsDatosDispositivos
+    public class ClsDatosDispositivos
     {
         public DataTable dtDispositivos()
         {
@@ -16,11 +16,9 @@ namespace DatosB
             return ClsAccesoDatos.RetornaDataTable(consulta);
         }
 
-        public DataTable dtRelojesValidos(List<string> lstSNValidos)
+        public DataTable DtRelojesValidos(List<string> lstSNValidos)
         {
-            string consulta;
-
-            consulta = @"select ID, MachineAlias as Nombre, IP, Port as Puerto, MachineNumber as NumeroDispositivo, sn as NumeroSerie
+            string consulta = @"select ID, MachineAlias as Nombre, IP, Port as Puerto, MachineNumber as NumeroDispositivo, sn as NumeroSerie
             from Machines 
             where sn in (" + string.Join(",", lstSNValidos) + ");";
 
