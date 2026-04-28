@@ -16,6 +16,7 @@ namespace AdminDispositivosBiometricos
         DataTable dtRelojes = new DataTable();
         private DataGridViewRow filaReloj;
         private const string SerialUsb = "1234567890123";
+        readonly ClsLogicaAdministradores _logicaAdministradores = new ClsLogicaAdministradores();
 
         public fPrincipal()
         {
@@ -35,7 +36,7 @@ namespace AdminDispositivosBiometricos
             LeeDatosFilaDgv(vEdicionReloj.datosReloj);
 
             vEdicionReloj.ShowDialog();
-            cargaRelojes();
+            CargaRelojes();
         }
 
         public bool ConfirmaRelojEsValido(string snReloj)
@@ -66,7 +67,7 @@ namespace AdminDispositivosBiometricos
             string nombreReloj = filaReloj.Cells[1].Value.ToString();
             if (!DetectaVentanaAbierta(nombreReloj))
             {
-                fControlReloj vReloj = new fControlReloj();
+                FControlReloj vReloj = new FControlReloj();
                 LeeDatosFilaDgv(vReloj.datosReloj);
                 vReloj.RelojesValidos = PrepareColumnas.DatatableToList(dtRelojes, "NumeroSerie");
                 vReloj.Show();
@@ -75,15 +76,16 @@ namespace AdminDispositivosBiometricos
 
         private void fPrincipal_Load(object sender, EventArgs e)
         {
-            cargaRelojes();
+            _logicaAdministradores.IngresaLog("Ingresa a AdminRelojesBio");
+            CargaRelojes();
         }
 
-        private void cargaRelojes()
+        private void CargaRelojes()
         {
             try
             {
-                clsLogicaDispositivos oRelojes = new clsLogicaDispositivos();
-                dtRelojes = oRelojes.dtRelojesValidos();
+                ClsLogicaDispositivos oRelojes = new ClsLogicaDispositivos();
+                dtRelojes = oRelojes.DtRelojesValidos();
                 ClsDataTableDgv.LlenaGridConDataTable(dtRelojes, dgvRelojes, new List<string> { "ID" });
             }
             catch (clsLogicaException errBdd)
@@ -99,7 +101,7 @@ namespace AdminDispositivosBiometricos
         private void ValidacionRelojes()
         {
 
-            clsLogicaDispositivos oLogDispositivos = new clsLogicaDispositivos();
+            ClsLogicaDispositivos oLogDispositivos = new ClsLogicaDispositivos();
 
             // Inicio modificación para BAN Ecuador
             //DateTime fechaVigencia = oSeguridadFechaVigencia.retornaFechaVigencia();
@@ -131,7 +133,7 @@ namespace AdminDispositivosBiometricos
         private void spBtnDescargaMasivaRelojes_ButtonClick(object sender, EventArgs e)
         {
             fDescargaMasiva fDescarga = new fDescargaMasiva();
-            clsLogicaDispositivos oLog = new clsLogicaDispositivos();
+            ClsLogicaDispositivos oLog = new ClsLogicaDispositivos();
             fDescarga.listaRelojes = oLog.ListRelojes();
             fDescarga.modo = fDescargaMasiva.EnumModo.Automático;
             fDescarga.Show();

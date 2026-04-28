@@ -85,7 +85,7 @@ namespace AdminDispositivosBiometricos
             if (!validaDatos())
                 return;
 
-            clsLogicaDispositivos oLog = new clsLogicaDispositivos();
+            ClsLogicaDispositivos oLog = new ClsLogicaDispositivos();
             oLog.ActualizarReloj(datosReloj.idReloj, txtNombre.Text, iNumero, IP, iPuerto, txtSn.Text);
             MessageBox.Show("Los cambios han sido guardados.", "Modificación realizada", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
