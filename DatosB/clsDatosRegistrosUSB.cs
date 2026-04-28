@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Diagnostics;
-using System.Text;
 using Utilitarios;
 
 namespace DatosB
@@ -20,7 +19,6 @@ namespace DatosB
             consulta = "SELECT userid FROM userinfo " + "WHERE badgenumber='" + badgenumber + "'";
             return ClsAccesoDatos.EjecutaEscalar(consulta);
         }
-
 
         public static void InsertaLoteRegsUSB(string listado)
         {
@@ -102,7 +100,7 @@ namespace DatosB
         //        throw error;
         //    }
         //}
-        public static void GuardaRegistrosUsbEnTemporal(IEnumerable<RegistroBiometrico> registros,string sn)
+        public static void GuardaRegistrosUsbEnTemporal(IEnumerable<RegistroBiometrico> registros, string sn)
         {
             try
             {
@@ -116,7 +114,7 @@ namespace DatosB
                         bulkCopy.BatchSize = 1000;
                         bulkCopy.BulkCopyTimeout = 60;
 
-                        var table = CreateMarcacionesDataTable(registros, sn);                        
+                        var table = CreateMarcacionesDataTable(registros, sn);
                         foreach (DataColumn col in table.Columns)
                         {
                             Debug.WriteLine(col.ColumnName);
@@ -185,7 +183,7 @@ namespace DatosB
                 FROM CHECKINOUT, RangeCTE
                 WHERE CHECKTIME >= RangeCTE.Desde AND CHECKTIME <= RangeCTE.Hasta AND sn = '1234567890123';";
                 var data = ClsAccesoDatos.RetornaDataTable(consulta);
-                if(data.Rows.Count <= 0) 
+                if (data.Rows.Count <= 0)
                     return -1;
 
                 int enBddEnMismasFechas = (int)data.Rows[0][0];

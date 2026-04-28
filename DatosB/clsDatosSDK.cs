@@ -1,4 +1,5 @@
 ﻿using ConexionDatos;
+using Dapper;
 using DatosB.Models;
 using Domain;
 using System;
@@ -50,6 +51,102 @@ namespace DatosB
                     + ", '" + fila.Cells[1].Value + "', " + fila.Cells[5].Value + ", '" + fila.Cells[6].Value + "', '" + fila.Cells[7].Value + "', '" + fila.Cells[7].Value + "');");
             }
             ClsAccesoDatos.EjecutaNoQuery(sbQueryHuellas.ToString());
+        }
+        public void GuardarUsuariosBiometricos(List<UsuarioBiometrico> usuarios)
+        {
+            // Si la lista está vacía, no molestamos a SQL Server
+            if (usuarios == null || usuarios.Count == 0) return;
+
+            string sqlCreaTabla = @"
+                CREATE TABLE #tmp_UsuariosBiometrico(
+                    [pin] [nvarchar](24) COLLATE DATABASE_DEFAULT NOT NULL,
+                    [name] [nvarchar](60) COLLATE DATABASE_DEFAULT NULL,
+                    [mverifypass] [nvarchar](100) COLLATE DATABASE_DEFAULT NULL,
+                    [cardNumber] [nvarchar](20) COLLATE DATABASE_DEFAULT NULL,
+                    [privilege] [int] NULL,
+                    [enprivilege] [smallint] NULL
+                );";
+
+            string sqlInsert = @"
+                INSERT INTO #tmp_UsuariosBiometrico (pin, name, mverifypass, cardNumber, privilege, enprivilege) 
+                VALUES (@Pin, @Name, @MVerifyPass, @CardNumber, @Privilege, @EnPrivilege);";
+
+            string sqlMerge = @"
+                MERGE USERINFO AS Target
+                USING #tmp_UsuariosBiometrico AS Source ON Target.Badgenumber = Source.pin
+                WHEN MATCHED THEN 
+                    UPDATE SET 
+                        Target.mverifypass = Source.mverifypass, 
+                        Target.cardNo = Source.cardNumber, 
+                        Target.Privilege = Source.privilege, 
+                        Target.emPrivilege = Source.enprivilege
+                WHEN NOT MATCHED THEN
+                    INSERT (Badgenumber, name, mVerifyPass, cardNo, EMPrivilege, privilege, DefaultDeptId)
+                    VALUES (Source.pin, Source.name, Source.mverifypass, Source.cardNumber, Source.enprivilege, Source.privilege,
+                            (SELECT TOP 1 deptid FROM DEPARTMENTS WHERE SUPDEPTID = 0));";
+
+            string connString = ClsAccesoDatos.strConexion;
+
+            using (var db = new SqlConnection(connString))
+            {
+                db.Open();
+                using (var transaction = db.BeginTransaction())
+                {
+                    try
+                    {
+                        db.Execute(sqlCreaTabla, transaction: transaction);
+                        db.Execute(sqlInsert, usuarios, transaction: transaction);
+                        db.Execute(sqlMerge, transaction: transaction);
+
+                        transaction.Commit();
+                    }
+                    catch (SqlException sqlEx)
+                    {
+                        // 1. Revertimos los cambios para no dejar transacciones colgadas
+                        transaction.Rollback();
+
+                        // 2. Construimos un mensaje súper detallado con lo que escupe SQL Server
+                        StringBuilder sbErrores = new StringBuilder();
+                        sbErrores.AppendLine("Ocurrió un error en SQL Server al guardar usuarios biométricos:");
+
+                        foreach (SqlError error in sqlEx.Errors)
+                        {
+                            sbErrores.AppendLine($" - Número de Error SQL: {error.Number}");
+                            sbErrores.AppendLine($" - Mensaje: {error.Message}");
+                            sbErrores.AppendLine($" - Línea del script: {error.LineNumber}");
+
+                            // Traducimos los códigos de error más comunes para que el dev sepa qué hacer:
+                            switch (error.Number)
+                            {
+                                case 2601:
+                                case 2627:
+                                    sbErrores.AppendLine("   [Diagnóstico]: Intento de insertar una clave primaria o única duplicada.");
+                                    break;
+                                case 515:
+                                    sbErrores.AppendLine("   [Diagnóstico]: Estás intentando insertar NULL en una columna que no lo permite.");
+                                    break;
+                                case 8152:
+                                    sbErrores.AppendLine("   [Diagnóstico]: Uno de los textos excede el tamaño máximo (varchar/nvarchar) definido en la tabla destino.");
+                                    break;
+                                case 547:
+                                    sbErrores.AppendLine("   [Diagnóstico]: Violación de llave foránea (Foreign Key). El departamento por defecto probablemente no existe o es inválido.");
+                                    break;
+                            }
+                            sbErrores.AppendLine("--------------------------------------------------");
+                        }
+
+                        // 3. Lanzamos una excepción con nuestro mensaje enriquecido 
+                        // manteniendo el stack trace original (sqlEx)
+                        throw new Exception(sbErrores.ToString(), sqlEx);
+                    }
+                    catch (Exception ex)
+                    {
+                        // Manejo de errores no relacionados con SQL Server (ej. Timeout de red, memoria, etc.)
+                        transaction.Rollback();
+                        throw new Exception($"Error general en la aplicación al guardar en BD: {ex.Message}", ex);
+                    }
+                }
+            }
         }
         public void ActualizaCreaDatosUsuarios(DataTable datosEmpleados)
         {
