@@ -1,14 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using LogicaB;
+using System;
 using System.Windows.Forms;
-using LogicaB;
-using Utilitarios;
+using DataGridViewAutoFilter;
 
 namespace AdminDispositivosBiometricos
 {
@@ -18,21 +11,28 @@ namespace AdminDispositivosBiometricos
         {
             InitializeComponent();
         }
-
-        private void fLogsDescargas_Load(object sender, EventArgs e)
+        private void FLogsDescargas_Load(object sender, EventArgs e)
         {
-            CargaDatos();
-        }
+            dtpDesde.Value = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
+            dtpHasta.Value = DateTime.Today;
 
+            CargaDatos();
+            foreach(DataGridViewColumn columna in dgvLogs.Columns)
+            {
+                columna.HeaderCell = new DataGridViewAutoFilterColumnHeaderCell(columna.HeaderCell);
+            }
+        }
         private void CargaDatos()
         {
             BindingSource bindingSource = new BindingSource();
-            bindingSource.DataSource = clsLogicaLogsDescargas.retornaLogs(100);
+            bindingSource.DataSource = ClsLogicaLogsDescargas.RetornaLogs(dtpDesde.Value, dtpHasta.Value);
             dgvLogs.DataSource = bindingSource;
             dgvLogs.Columns["LogTime"].DefaultCellStyle.Format = "dd/MM/yyyy HH:mm:ss.fff";
-
         }
 
-
+        private void BtnConsultar_Click(object sender, EventArgs e)
+        {
+            CargaDatos();
+        }
     }
 }
