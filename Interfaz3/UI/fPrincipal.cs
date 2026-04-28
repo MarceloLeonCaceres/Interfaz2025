@@ -77,6 +77,8 @@ namespace AdminDispositivosBiometricos
         private void fPrincipal_Load(object sender, EventArgs e)
         {
             _logicaAdministradores.IngresaLog("Ingresa a AdminRelojesBio");
+            var _loggerDescargas = new clsLogicaSDK();
+            _loggerDescargas.RegistraLogEventoBdd(0, "", 0, "Ingresa a AdminRelojesBio", "");
             CargaRelojes();
         }
 
@@ -292,6 +294,13 @@ namespace AdminDispositivosBiometricos
         {
             fEmpleado vEmpleado = new fEmpleado();
             vEmpleado.ShowDialog();
+        }
+
+        private void FPrincipal_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            _logicaAdministradores.IngresaLog("Sale de AdminRelojesBio");
+            var _loggerDescargas = new clsLogicaSDK();
+            _loggerDescargas.RegistraLogEventoBdd(0, "", 0, "Sale de AdminRelojesBio", "");
         }
     }
 }

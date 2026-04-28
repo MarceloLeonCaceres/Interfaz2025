@@ -41,6 +41,7 @@
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvRelojes)).BeginInit();
             this.statusStrip1.SuspendLayout();
@@ -123,6 +124,7 @@
             // spBtnDescargaMasivaRelojes
             // 
             this.spBtnDescargaMasivaRelojes.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripSeparator1,
             this.tsmiLecturaLogs});
             this.spBtnDescargaMasivaRelojes.Image = global::AdminDispositivosBiometricos.Properties.Resources.Descarga_32x32;
             this.spBtnDescargaMasivaRelojes.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
@@ -135,6 +137,7 @@
             // 
             // tsmiLecturaLogs
             // 
+            this.tsmiLecturaLogs.Image = global::AdminDispositivosBiometricos.Properties.Resources.LupaVerde_16x16;
             this.tsmiLecturaLogs.Name = "tsmiLecturaLogs";
             this.tsmiLecturaLogs.Size = new System.Drawing.Size(205, 22);
             this.tsmiLecturaLogs.Text = "Consulta Logs Descargas";
@@ -180,6 +183,11 @@
             this.toolStripStatusLabel1.Text = "V3.26.3.20";
             this.toolStripStatusLabel1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(202, 6);
+            // 
             // fPrincipal
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -191,6 +199,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "fPrincipal";
             this.Text = "Administración Equipos Biométricos";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FPrincipal_FormClosing);
             this.Load += new System.EventHandler(this.fPrincipal_Load);
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();
@@ -216,6 +225,7 @@
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
         private System.Windows.Forms.StatusStrip statusStrip1;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
     }
 }
 
