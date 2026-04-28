@@ -55,7 +55,7 @@
     <Compile Include="clsLogicaDepartamentos.cs" />
     <Compile Include="ClsLogicaDispositivos.cs" />
     <Compile Include="clsLogicaEmpleados.cs" />
-    <Compile Include="clsLogicaLogsDescargas.cs" />
+    <Compile Include="ClsLogicaLogsDescargas.cs" />
     <Compile Include="clsLogicaRegistrosUSB.cs" />
     <Compile Include="clsLogicaSDK.cs" />
     <Compile Include="clsLogicaSeguridadInterfazRelojes.cs" />

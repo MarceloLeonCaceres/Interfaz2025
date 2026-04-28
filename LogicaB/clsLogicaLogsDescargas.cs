@@ -1,18 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using DatosB;
+using System;
 using System.Data;
-using DatosB;
 
 namespace LogicaB
 {
-    public static class clsLogicaLogsDescargas
+    public static class ClsLogicaLogsDescargas
     {
-        public static DataTable retornaLogs(int numLogs)
+        public static DataTable RetornaLogs(DateTime desde, DateTime hasta)
         {
-            return clsDatosLogsDescargas.retornaLogs(numLogs);
+            return ClsDatosLogsDescargas.RetornaLogs(desde, hasta.AddDays(1));
         }
     }
 }
