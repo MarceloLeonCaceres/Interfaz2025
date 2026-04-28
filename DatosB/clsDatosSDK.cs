@@ -2,6 +2,7 @@
 using Dapper;
 using DatosB.Models;
 using Domain;
+using Domain.Administradores;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -524,8 +525,8 @@ TRUNCATE TABLE tmp_BADGES;");
             {
 
                 ClsAccesoDatos.EjecutaNoQuery(@"INSERT INTO [da_DetalleDescarga] 
-            ( [orden], [LogTime], [sn], [idProceso], [LogDescr], [LogDetailed])
-            VALUES(" + orden + ", GETDATE(), '" + sn + "', " + idProceso + ", '" + sTarea + "', '" + sTareaDetallada + "');");
+            ( [orden], [LogTime], [Operator], [sn], [idProceso], [LogDescr], [LogDetailed])
+            VALUES(" + orden + ", GETDATE(), '" + Globales.CodAdminLog + "',  '" + sn + "', " + idProceso + ", '" + sTarea + "', '" + sTareaDetallada + "');");
             }
             catch (clsDataBaseException dbEx)
             {
