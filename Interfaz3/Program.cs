@@ -1,4 +1,6 @@
-﻿using LogicaB;
+﻿using AdminDispositivosBiometricos.UI;
+using Domain.Administradores;
+using LogicaB;
 using System;
 using System.Configuration;
 using System.Management;
@@ -20,7 +22,7 @@ namespace AdminDispositivosBiometricos
             //// Inicio extraccion reloj para pruebas
             //System.Net.IPAddress ipAddress = System.Net.IPAddress.Parse("192.168.1.201");
             //ClsReloj datosRelojPrueba = new ClsReloj(1, "G3Blanco", 1, ipAddress, 4370, "AEH2185060039");
-            //fControlReloj vReloj = new fControlReloj(datosRelojPrueba);
+            //FControlReloj vReloj = new FControlReloj(datosRelojPrueba);
             //Application.Run(vReloj);
             //// Fin extraccion reloj para pruebas
             //bool hayModificacionesBdd = clsLogicaSeguridadInterfazRelojes.HayModificacionesEnBdd();
@@ -80,15 +82,26 @@ namespace AdminDispositivosBiometricos
                 }
             }
 
+            var oLogAdministradores = new LogicaB.ClsLogicaAdministradores();
             if (args.Length == 0)
             {
-                Application.Run(new fPrincipal());
-                // Application.Run(new fEmpleado());
+                int i = oLogAdministradores.CuentaAdministradores();
+                if(i == 0)
+                {
+                    Globales.TAdminLogeado = 3;
+                    Globales.CodAdminLog = "-1";
+                    Application.Run(new fPrincipal());
+                }
+                else
+                {
+                    Application.Run(new FLogin());
+                    // Application.Run(new fEmpleado());
+                }
             }
             else
             {
                 fDescargaMasiva fDescarga = new fDescargaMasiva();
-                clsLogicaDispositivos oLog = new clsLogicaDispositivos();
+                ClsLogicaDispositivos oLog = new ClsLogicaDispositivos();
                 fDescarga.listaRelojes = oLog.ListRelojes();
                 fDescarga.modo = fDescargaMasiva.EnumModo.Automático;
                 fDescarga.Show();
