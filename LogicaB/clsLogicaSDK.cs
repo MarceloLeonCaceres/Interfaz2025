@@ -77,6 +77,7 @@ namespace LogicaB
                 throw new clsLogicaException(ex.Message);
             }
         }
+        
         public void FinalizaGrabacionHuellas()
         {
             try
