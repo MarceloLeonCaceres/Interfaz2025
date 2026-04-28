@@ -1,6 +1,6 @@
 ﻿namespace AdminDispositivosBiometricos
 {
-    partial class fControlReloj
+    partial class FControlReloj
     {
         /// <summary>
         /// Required designer variable.
@@ -30,7 +30,7 @@
         {
             this.components = new System.ComponentModel.Container();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(fControlReloj));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FControlReloj));
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.tsbConectar = new System.Windows.Forms.ToolStripButton();
             this.tsbInfoReloj = new System.Windows.Forms.ToolStripButton();
@@ -308,7 +308,7 @@
             this.tsbConsultarUsuarios.Size = new System.Drawing.Size(155, 51);
             this.tsbConsultarUsuarios.Text = "Consultar Usuarios en Reloj";
             this.tsbConsultarUsuarios.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
-            this.tsbConsultarUsuarios.Click += new System.EventHandler(this.tsbUsuarios_Click);
+            this.tsbConsultarUsuarios.Click += new System.EventHandler(this.TsbUsuarios_Click);
             // 
             // tsbAvanzado
             // 
@@ -967,7 +967,7 @@
             this.btnDescargaRostros.Text = "Descargar Rostros";
             this.btnDescargaRostros.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.btnDescargaRostros.UseVisualStyleBackColor = true;
-            this.btnDescargaRostros.Click += new System.EventHandler(this.btnDescargaRostros_Click);
+            this.btnDescargaRostros.Click += new System.EventHandler(this.BtnDescargaRostros_Click);
             // 
             // btnDescargarHuellas
             // 
@@ -1360,7 +1360,7 @@
             this.btnSetAllUserFPInfo.Text = "Enviar Huellas a Biométrico";
             this.btnSetAllUserFPInfo.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.btnSetAllUserFPInfo.UseVisualStyleBackColor = true;
-            this.btnSetAllUserFPInfo.Click += new System.EventHandler(this.btnEnviarHuellasABiometrico_Click);
+            this.btnSetAllUserFPInfo.Click += new System.EventHandler(this.BtnEnviarHuellasABiometrico_Click);
             // 
             // tpEnviarRostros
             // 
@@ -1479,7 +1479,7 @@
             this.btnEnviarRostrosABiometrico.Text = "Enviar Rostros a Biométrico";
             this.btnEnviarRostrosABiometrico.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.btnEnviarRostrosABiometrico.UseVisualStyleBackColor = true;
-            this.btnEnviarRostrosABiometrico.Click += new System.EventHandler(this.btnEnviarRostrosABiometrico_Click);
+            this.btnEnviarRostrosABiometrico.Click += new System.EventHandler(this.BtnEnviarRostrosABiometrico_Click);
             // 
             // tpEnviarNombres
             // 
@@ -1598,7 +1598,7 @@
             this.btnEnviarNombresUsuarios.Text = "Enviar Info a Biométrico";
             this.btnEnviarNombresUsuarios.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.btnEnviarNombresUsuarios.UseVisualStyleBackColor = true;
-            this.btnEnviarNombresUsuarios.Click += new System.EventHandler(this.btnEnviarNombresUsuarios_Click);
+            this.btnEnviarNombresUsuarios.Click += new System.EventHandler(this.BtnEnviarNombresUsuarios_Click);
             // 
             // btnTraerUsuariosDeBdd
             // 
@@ -1650,7 +1650,7 @@
             this.btnPowerOffDevice.TabIndex = 80;
             this.btnPowerOffDevice.Text = "Apagar reloj";
             this.btnPowerOffDevice.UseVisualStyleBackColor = true;
-            this.btnPowerOffDevice.Click += new System.EventHandler(this.btnPowerOffDevice_Click);
+            this.btnPowerOffDevice.Click += new System.EventHandler(this.BtnPowerOffDevice_Click);
             // 
             // btnRestartDevice
             // 
@@ -1662,7 +1662,7 @@
             this.btnRestartDevice.TabIndex = 78;
             this.btnRestartDevice.Text = "Apagar y Encender";
             this.btnRestartDevice.UseVisualStyleBackColor = true;
-            this.btnRestartDevice.Click += new System.EventHandler(this.btnRestartDevice_Click);
+            this.btnRestartDevice.Click += new System.EventHandler(this.BtnRestartDevice_Click);
             // 
             // groupBox1
             // 
@@ -1706,7 +1706,7 @@
             this.btnSetDeviceTime.TabIndex = 10;
             this.btnSetDeviceTime.Text = "Pone Hora en el reloj";
             this.btnSetDeviceTime.UseVisualStyleBackColor = true;
-            this.btnSetDeviceTime.Click += new System.EventHandler(this.btnSetDeviceTime_Click);
+            this.btnSetDeviceTime.Click += new System.EventHandler(this.BtnSetDeviceTime_Click);
             // 
             // lbDeviceTime
             // 
@@ -1727,7 +1727,7 @@
             this.btnGetDeviceTime.TabIndex = 2;
             this.btnGetDeviceTime.Text = "Lee Hora del reloj";
             this.btnGetDeviceTime.UseVisualStyleBackColor = true;
-            this.btnGetDeviceTime.Click += new System.EventHandler(this.btnGetDeviceTime_Click);
+            this.btnGetDeviceTime.Click += new System.EventHandler(this.BtnGetDeviceTime_Click);
             // 
             // btnSYNCTime
             // 
@@ -1737,7 +1737,7 @@
             this.btnSYNCTime.TabIndex = 1;
             this.btnSYNCTime.Text = "Sincroniza hora";
             this.btnSYNCTime.UseVisualStyleBackColor = true;
-            this.btnSYNCTime.Click += new System.EventHandler(this.btnSYNCTime_Click);
+            this.btnSYNCTime.Click += new System.EventHandler(this.BtnSYNCTime_Click);
             // 
             // btn_clearAllData
             // 
@@ -1747,7 +1747,7 @@
             this.btn_clearAllData.TabIndex = 1;
             this.btn_clearAllData.Text = "Borrar todos los datos";
             this.btn_clearAllData.UseVisualStyleBackColor = true;
-            this.btn_clearAllData.Click += new System.EventHandler(this.btn_clearAllData_Click);
+            this.btn_clearAllData.Click += new System.EventHandler(this.Btn_clearAllData_Click);
             // 
             // btn_clearAllUser
             // 
@@ -1757,7 +1757,7 @@
             this.btn_clearAllUser.TabIndex = 2;
             this.btn_clearAllUser.Text = "Borrar todos los usuarios";
             this.btn_clearAllUser.UseVisualStyleBackColor = true;
-            this.btn_clearAllUser.Click += new System.EventHandler(this.btn_clearAllUser_Click);
+            this.btn_clearAllUser.Click += new System.EventHandler(this.Btn_clearAllUser_Click);
             // 
             // btn_clearAllFp
             // 
@@ -1767,7 +1767,7 @@
             this.btn_clearAllFp.TabIndex = 3;
             this.btn_clearAllFp.Text = "Borrar todas las huellas";
             this.btn_clearAllFp.UseVisualStyleBackColor = true;
-            this.btn_clearAllFp.Click += new System.EventHandler(this.btn_clearAllFp_Click);
+            this.btn_clearAllFp.Click += new System.EventHandler(this.Btn_clearAllFp_Click);
             // 
             // btn_clearAllLogs
             // 
@@ -1777,7 +1777,7 @@
             this.btn_clearAllLogs.TabIndex = 4;
             this.btn_clearAllLogs.Text = "Borrar todos los registros";
             this.btn_clearAllLogs.UseVisualStyleBackColor = true;
-            this.btn_clearAllLogs.Click += new System.EventHandler(this.btn_clearAllLogs_Click);
+            this.btn_clearAllLogs.Click += new System.EventHandler(this.Btn_clearAllLogs_Click);
             // 
             // btn_delAttLog
             // 
@@ -1789,7 +1789,7 @@
             this.btn_delAttLog.TabIndex = 104;
             this.btn_delAttLog.Text = "Borrar Marcaciones";
             this.btn_delAttLog.UseVisualStyleBackColor = true;
-            this.btn_delAttLog.Click += new System.EventHandler(this.btn_delAttLog_Click);
+            this.btn_delAttLog.Click += new System.EventHandler(this.Btn_delAttLog_Click);
             // 
             // btn_clearAdmin
             // 
@@ -1802,7 +1802,7 @@
             this.btn_clearAdmin.Text = "Quitar Privilegios Administrador";
             this.btn_clearAdmin.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.btn_clearAdmin.UseVisualStyleBackColor = true;
-            this.btn_clearAdmin.Click += new System.EventHandler(this.btn_clearAdmin_Click);
+            this.btn_clearAdmin.Click += new System.EventHandler(this.Btn_clearAdmin_Click);
             // 
             // PrgSTA
             // 
@@ -1862,7 +1862,7 @@
             this.timer1.Interval = 500;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
-            // fControlReloj
+            // FControlReloj
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -1870,9 +1870,10 @@
             this.Controls.Add(this.splitContainer1);
             this.Controls.Add(this.toolStrip1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Name = "fControlReloj";
+            this.Name = "FControlReloj";
             this.Text = "fControlReloj";
-            this.Load += new System.EventHandler(this.fControlReloj_Load);
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FControlReloj_FormClosing);
+            this.Load += new System.EventHandler(this.FControlReloj_Load);
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();
             this.splitContainer1.Panel1.ResumeLayout(false);
